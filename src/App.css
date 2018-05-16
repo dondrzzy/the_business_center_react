@@ -1,0 +1,140 @@
+html{
+    height: 100%;
+}
+ul{
+  padding: 0;
+}
+li{
+  list-style-type: none;
+}
+a{
+  color: #337ab7;
+}
+.lc{
+  text-transform: capitalize;
+}
+#main.container{
+  margin-top: 100px;
+}
+#limit{
+  height:100%;
+}
+.row {
+    margin-bottom: 30px;
+}
+.navbar .nav-link{
+  font-size: 12px;
+  text-transform: capitalize;
+  font-weight: 400;
+}
+.jumbotron{
+    background: #eee;
+}
+footer{
+  /*position:fixed;*/
+  bottom:0;
+  left:0;
+  right:0;
+}
+footer hr{
+  margin-top:0;
+}
+
+.Home a:first-child{
+  margin-right:5px;
+}
+.SignIn, .SignUp{
+  max-width:420px;
+}
+.wasValidated .feedback{
+  display: block !important;
+}
+/*business-item*/
+.business-item .card-header{
+  background-color:#6c757d!important;
+}
+.card h4, .card a{
+  color: #fff;
+}
+.card button{
+  text-transform: capitalize;
+}
+
+/*Dashboard*/
+.light{
+  background-color: #fff!important;
+}
+.call-action{  
+  border-radius: 2px;
+    background: #f8f8f8;
+    border: 1px solid #e9e9e9;
+    padding: 30px 20px 20px 20px;
+    margin-bottom: 0;
+    border-left: 5px solid #3498db;
+    overflow: hidden;
+}
+.call-action .text {
+    float: left;
+}
+.call-action .cta {
+    float: right;
+}
+.section-heading{
+    position: relative;
+    border-bottom: #e9e9e9 1px solid;
+    padding-bottom: 9px;
+    margin-bottom: 24px;
+}
+.section-heading span{
+    background: #3498db;
+    position: absolute;
+    width: 100px;
+    height: 1px;
+    bottom: -1px;
+    left: 20px;
+}
+.business-card{
+  margin-bottom: 24px;
+}
+
+ul.reviews{
+  max-height: 100px;
+  overflow-y: scroll;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+ul.reviews li{
+  padding: 5px;
+  margin-bottom: 10px;
+  border-left: 1px solid #fff;
+  position: relative;
+}
+ul.reviews li span.mini-border-bottom{
+  background: #fff;
+    position: absolute;
+    width: 50px;
+    height: 3px;
+    bottom: -1px;
+    left: 0px;
+}
+.light ul.reviews li{
+  border-left: 1px solid #eee;
+}
+.light ul.reviews li span.mini-border-bottom{
+  background: #eee;
+    position: absolute;
+    width: 50px;
+    height: 3px;
+    bottom: -1px;
+    left: 0px;
+}
+
+.page-link{
+  color: #007bff!important;
+  background-color: #fff!important;
+}
+.page-item.active .page-link{
+  background-color: #007bff!important;
+  color: #fff!important;
+}
