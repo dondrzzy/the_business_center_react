@@ -1,10 +1,12 @@
 import dispatcher from "../dispatcher";
+import * as urlConfig from '../utils/baseUrl';
 import axios from "axios";
+const baseUrl = urlConfig.default.getBaseUrl()+'auth/';
 
 export const authenticate_user = (data) =>{
     axios({
         method: 'post',
-        url: 'http://127.0.0.1:5000/api/v1/auth/login',
+        url: baseUrl+'login',
         data: data,
         headers: {
             'Content-Type': 'application/json'
@@ -25,14 +27,14 @@ export const authenticate_user = (data) =>{
 }
 
 export const logout = () =>{
-    const token = localStorage.getItem('jwt') 
-    ? JSON.parse(localStorage.getItem('jwt')) 
+    const token = window.localStorage.getItem('jwt') 
+    ? JSON.parse(window.localStorage.getItem('jwt')) 
     : null;
 
     console.log('token', token);
     axios({
         method: 'get',
-        url: 'http://127.0.0.1:5000/api/v1/auth/logout',
+        url: baseUrl+'logout',
         headers:{
             'Content-Type':'application/json',
             'x-access-token': token
@@ -56,7 +58,7 @@ export const logout = () =>{
 export const registerUser = (data) =>{
     axios({
         method: 'post',
-        url: 'http://127.0.0.1:5000/api/v1/auth/register',
+        url: baseUrl+'register',
         data: data,
         headers: {
             'Content-Type': 'application/json'
@@ -81,7 +83,7 @@ export const registerUser = (data) =>{
 export const resetPasword = (data) =>{
     axios({
         method: 'post',
-        url: 'http://127.0.0.1:5000/api/v1/auth/reset-password',
+        url: baseUrl+'reset-password',
         data: data,
         headers: {
             'Content-Type': 'application/json'
@@ -106,7 +108,7 @@ export const resetPasword = (data) =>{
 
 // export const getBusinesses = () =>{     
 //     dispatcher.dispatch({ type:"FETCHING_BUSINESSES" });
-//     axios.get("http://127.0.0.1:5000/api/v1/businesses")
+//     axios.get("/businesses")
 //         .then(res => {
 //             console.log('fetched', res.data);
 //             dispatcher.dispatch({

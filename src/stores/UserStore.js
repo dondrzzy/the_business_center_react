@@ -4,7 +4,7 @@ import dispatcher from '../dispatcher';
 export class UserStore extends EventEmitter{
     constructor(){
         super();
-        const tokenExists = localStorage.getItem('jwt') ? true: null;
+        const tokenExists = window.localStorage.getItem('jwt') ? true: null;
         this.auth = {
             isAuthenticated : tokenExists,
             jwt : null
@@ -18,14 +18,14 @@ export class UserStore extends EventEmitter{
     }
 
     getJwt(){
-        return JSON.parse(localStorage.getItem('jwt'));
+        return JSON.parse(window.localStorage.getItem('jwt'));
     }
 
     loginUser(res){
         console.log(res);
         if(res.success){
             this.auth.isAuthenticated = true;
-            localStorage.setItem('jwt', JSON.stringify(res.token))
+            window.localStorage.setItem('jwt', JSON.stringify(res.token))
             this.emit('change');
         }else{
             this.message = res.message;
@@ -36,7 +36,7 @@ export class UserStore extends EventEmitter{
     logout(res){
         this.auth.isAuthenticated = false;
         this.message = res.message;
-        localStorage.removeItem('jwt');
+        window.localStorage.removeItem('jwt');
         this.emit('change');
     }
     get_response(){
