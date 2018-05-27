@@ -20,7 +20,6 @@ export default class App extends Component{
   }
 
   auth(cmd=null){
-    console.log('logging in...');
     if(cmd === 'signin') this.setState({ isLoggedIn : true });
     else  this.setState({ isLoggedIn : false });
   }

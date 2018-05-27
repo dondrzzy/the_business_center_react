@@ -4,21 +4,23 @@ import axios from "axios";
 const baseUrl = urlConfig.default.getBaseUrl()+'auth/';
 
 export const authenticate_user = (data) =>{
-    axios({
-        method: 'post',
-        url: baseUrl+'login',
-        data: data,
-        headers: {
+    axios.post(
+        baseUrl+'login',
+        data,
+        {
+            headers: {
             'Content-Type': 'application/json'
-        }
-    })
-    .then(response=> 
+            }
+        })
+    .then(response=>{
+        console.log(response);
         dispatcher.dispatch({
             type:"LOGIN_USER",
             data:response.data
         })
-    )
+    })
     .catch(function (error) {
+        console.log(error);
         dispatcher.dispatch({
             type:"LOGIN_USER",
             data: error.response.data
@@ -56,27 +58,27 @@ export const logout = () =>{
 }
 
 export const registerUser = (data) =>{
-    axios({
-        method: 'post',
-        url: baseUrl+'register',
-        data: data,
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(function (response) {
-        console.log(response)
-        dispatcher.dispatch({
-            type:"REGISTERED_USER",
-            data:response.data
-        });
-    })
-    .catch(function (error) {
-        dispatcher.dispatch({
-            type:"REGISTERED_USER",
-            data: error.response.data
-        });
-    });
+    // axios({
+    //     method: 'post',
+    //     url: baseUrl+'register',
+    //     data: data,
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     }
+    // })
+    // .then(function (response) {
+    //     console.log(response)
+    //     dispatcher.dispatch({
+    //         type:"REGISTERED_USER",
+    //         data:response.data
+    //     });
+    // })
+    // .catch(function (error) {
+    //     dispatcher.dispatch({
+    //         type:"REGISTERED_USER",
+    //         data: error.response.data
+    //     });
+    // });
     
 }
 
@@ -107,7 +109,6 @@ export const resetPasword = (data) =>{
 
 
 // export const getBusinesses = () =>{     
-//     dispatcher.dispatch({ type:"FETCHING_BUSINESSES" });
 //     axios.get("/businesses")
 //         .then(res => {
 //             console.log('fetched', res.data);

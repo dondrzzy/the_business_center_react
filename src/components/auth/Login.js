@@ -122,6 +122,7 @@ class Login extends Component{
         let emailRes = this.handleEmailValidation(email);
         let passwordRes = this.handlePasswordValidation(password);
         if(emailRes && passwordRes){
+            console.log('submitting');
             this.setState({loaderStyle:{display:"inline-block"} , processing:true})
             UserActions.authenticate_user({email:email, password:password});
         }else{
