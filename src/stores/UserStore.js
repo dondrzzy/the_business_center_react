@@ -22,7 +22,7 @@ export class UserStore extends EventEmitter{
     }
 
     loginUser(res){
-        console.log(res);
+        console.log('res', res);
         if(res.success){
             this.auth.isAuthenticated = true;
             window.localStorage.setItem('jwt', JSON.stringify(res.token))

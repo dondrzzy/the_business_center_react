@@ -27,6 +27,7 @@ class Login extends Component{
     }
 
     componentWillMount(){
+        console.log('-----------unmounting');
         UserStore.on('change', this.LoginUser);
         UserStore.on('error', this.showLoginErrors);
     }
@@ -55,15 +56,7 @@ class Login extends Component{
             passwordMessage: "This field is required"
         });
     }
-    validatePassword(password){
-        // eslint-disable-next-line to the line before.
-        const regExp = new RegExp(/^(?=.*?[a-z])(?=.*?[\d])(?=.*?[\W]).{8,35}$/);
-        if(regExp.test(password)){
-            return true;
-        }else{
-            return false;
-        }
-    }
+    
     handlePasswordValidation(password){
         if(!password.trim()){
             this.setState({
@@ -133,7 +126,7 @@ class Login extends Component{
 
     render(){
         const { redirectToReferrer } = this.state;
-        const { from } = this.props.location.state || { from : {pathname : '/dashboard'}}
+        const { from } = this.props.location ? this.props.location.state : { from : {pathname : '/dashboard'}}
         if(redirectToReferrer === true){
             console.log('redirecting');
             console.log(this.state);
