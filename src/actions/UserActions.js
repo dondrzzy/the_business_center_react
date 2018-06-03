@@ -13,7 +13,7 @@ export const authenticate_user = (data) =>{
             }
         })
     .then(response=>{
-        console.log(response);
+        // console.log(response);
         dispatcher.dispatch({
             type:"LOGIN_USER",
             data:response.data

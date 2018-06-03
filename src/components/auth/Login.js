@@ -27,7 +27,6 @@ class Login extends Component{
     }
 
     componentWillMount(){
-        console.log('-----------unmounting');
         UserStore.on('change', this.LoginUser);
         UserStore.on('error', this.showLoginErrors);
     }
@@ -36,7 +35,7 @@ class Login extends Component{
         UserStore.removeListener("error", this.showLoginErrors);
     }
     LoginUser(){
-        console.log('state', UserStore.isLoggedIn());
+        console.log('done')
         this.setState({
             loaderStyle:{display:"none"},
             redirectToReferrer : UserStore.isLoggedIn()
@@ -126,7 +125,7 @@ class Login extends Component{
 
     render(){
         const { redirectToReferrer } = this.state;
-        const { from } = this.props.location ? this.props.location.state : { from : {pathname : '/dashboard'}}
+        const { from } = this.props.location.state ? this.props.location.state : { from : {pathname : '/dashboard'}}
         if(redirectToReferrer === true){
             console.log('redirecting');
             console.log(this.state);
