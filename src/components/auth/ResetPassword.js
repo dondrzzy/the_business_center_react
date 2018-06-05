@@ -161,7 +161,7 @@ export default class ResetPassword extends Component{
                 "confirm_password": confirmPassword
             }
             this.setState({loaderStyle:{display:"inline-block"} , processing:true});
-            UserActions.resetPasword(data);
+            UserActions.resetPassword(data);
         }
     }
 
@@ -201,12 +201,14 @@ export default class ResetPassword extends Component{
                         </div>
                         <div className="form-group">
                             <label className="col-form-label" htmlFor="">New Password:</label>
-                            <input disabled={disabled} type="password" ref="password" className={this.state.passwordClassName} placeholder="Password" />
+                            <input disabled={disabled} type="password" ref="password" 
+                            className={this.state.passwordClassName} name="password" placeholder="Password" />
                             {passwordFeedback}
                         </div>
                         <div className="form-group">
                             <label className="col-form-label" htmlFor="confirmPassword">Confirm Password:</label>
-                            <input disabled={disabled} type="password" ref="confirmPassword" className={this.state.confirmPasswordClassName} placeholder="Confirm Password" />
+                            <input disabled={disabled} type="password" ref="confirmPassword" 
+                            className={this.state.confirmPasswordClassName} name="confirmPassword" placeholder="Confirm Password" />
                             {confirmPasswordFeedback}
                         </div>
                         <div className="form-group">

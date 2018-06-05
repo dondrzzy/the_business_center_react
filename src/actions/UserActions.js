@@ -3,7 +3,7 @@ import * as urlConfig from '../utils/baseUrl';
 import axios from "axios";
 const baseUrl = urlConfig.default.getBaseUrl()+'auth/';
 
-export const authenticate_user = (data) =>{
+export const authenticateUser = (data) =>{
     axios.post(
         baseUrl+'login',
         data,
@@ -34,13 +34,13 @@ export const logout = () =>{
     : null;
 
     console.log('token', token);
-    axios({
-        method: 'get',
-        url: baseUrl+'logout',
-        headers:{
-            'Content-Type':'application/json',
+    axios.get(
+        baseUrl+'logout',
+        {
+            headers: {
+            'Content-Type': 'application/json',
             'x-access-token': token
-        }
+            }
     })
     .then(function (response) {
         console.log('response', response);
@@ -57,40 +57,40 @@ export const logout = () =>{
     });
 }
 
-export const registerUser = (data) =>{
-    // axios({
-    //     method: 'post',
-    //     url: baseUrl+'register',
-    //     data: data,
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // })
-    // .then(function (response) {
-    //     console.log(response)
-    //     dispatcher.dispatch({
-    //         type:"REGISTERED_USER",
-    //         data:response.data
-    //     });
-    // })
-    // .catch(function (error) {
-    //     dispatcher.dispatch({
-    //         type:"REGISTERED_USER",
-    //         data: error.response.data
-    //     });
-    // });
+export const registerUser = (data) => {
+    axios.post(
+        baseUrl+'register',
+        data,
+        {
+            headers: {
+            'Content-Type': 'application/json'
+            }
+        })
+    .then(function (response) {
+        console.log(response)
+        dispatcher.dispatch({
+            type:"REGISTERED_USER",
+            data:response.data
+        });
+    })
+    .catch(function (error) {
+        dispatcher.dispatch({
+            type:"REGISTERED_USER",
+            data: error.response.data
+        });
+    });
     
 }
 
-export const resetPasword = (data) =>{
-    axios({
-        method: 'post',
-        url: baseUrl+'reset-password',
-        data: data,
-        headers: {
+export const resetPassword = (data) =>{
+    axios.post(
+        baseUrl+'reset-password',
+        data,
+        {
+            headers: {
             'Content-Type': 'application/json'
-        }
-    })
+            }
+        })
     .then(function (response) {
         dispatcher.dispatch({
             type:"RESET_PASSWORD",

@@ -7,6 +7,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import { css } from 'glamor';
 
 class Login extends Component{
+    static propTypes = {
+        auth : PropTypes.func
+    }
 
     constructor(){
         super();
@@ -30,11 +33,11 @@ class Login extends Component{
         UserStore.on('change', this.LoginUser);
         UserStore.on('error', this.showLoginErrors);
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
         UserStore.removeListener("change", this.LoginUser);
         UserStore.removeListener("error", this.showLoginErrors);
     }
-    LoginUser(){
+    LoginUser() {
         console.log('done')
         this.setState({
             loaderStyle:{display:"none"},
@@ -107,7 +110,8 @@ class Login extends Component{
         }
         return false;
     }
-    handleSubmit(e){
+
+    handleSubmit(e) {
         e.preventDefault();
         let email =  this.refs.email.value;
         let password =  this.refs.password.value;
@@ -116,7 +120,7 @@ class Login extends Component{
         if(emailRes && passwordRes){
             console.log('submitting');
             this.setState({loaderStyle:{display:"inline-block"} , processing:true})
-            UserActions.authenticate_user({email:email, password:password});
+            UserActions.authenticateUser({email:email, password:password});
         }else{
             console.log("invalid form");
         }
@@ -189,9 +193,5 @@ class Login extends Component{
     }
 }
 
-Login.propTypes = {
-    auth : PropTypes.func
-}
-
-export default Login
+export default Login;
             

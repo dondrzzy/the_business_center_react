@@ -262,12 +262,14 @@ export default class Register extends Component{
                         </div>
                         <div className="form-group">
                             <label className="col-form-label" htmlFor="">Password:</label>
-                            <input disabled={disabled} type="password" ref="password" className={this.state.passwordClassName} placeholder="Password" />
+                            <input disabled={disabled} type="password" ref="password" 
+                            className={this.state.passwordClassName} name="password" placeholder="Password" />
                             {passwordFeedback}
                         </div>
                         <div className="form-group">
                             <label className="col-form-label" htmlFor="confirmPassword">Confirm Password:</label>
-                            <input disabled={disabled} type="password" ref="confirmPassword" className={this.state.confirmPasswordClassName} placeholder="Confirm Password" />
+                            <input disabled={disabled} type="password" ref="confirmPassword" 
+                            className={this.state.confirmPasswordClassName} name="confirmPassword" placeholder="Confirm Password" />
                             {confirmPasswordFeedback}
                         </div>
                         <div className="form-group">

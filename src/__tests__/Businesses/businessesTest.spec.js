@@ -1,27 +1,25 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import Login from '../../components/auth/Login';
+import Businesses from '../../components/Businesses/index';
 import { MemoryRouter } from 'react-router-dom';
-import * as UserActions from '../../actions/UserActions';
-import UserStore from '../../stores/UserStore';
+import * as BusinessActions from '../../actions/BusinessActions';
+import BusinessStore from '../../stores/BusinessStore';
 import axios from 'axios';
 import sinon from 'sinon';
 
 
 
-describe('<Login />', () => {
+describe('<Businesses />', () => {
   
-  // it('should call lifecycle methods', ()=>{
-  //   jest.spyOn(Login.prototype, 'componentWillUnmount');
-  //   const location = {'state':{'from':'/businesses'}};
-  //   const wrapper = mount(
-  //     <MemoryRouter>
-  //       <Login location={location}/>
-  //     </MemoryRouter>
-  //   );
-  //   wrapper.unmount()
-  //   expect(Login.prototype.componentWillUnmount).toHaveBeenCalled();
-  // });
+  it('should call lifecycle methods', ()=>{
+    jest.spyOn(Businesses.prototype, 'componentWillUnmount');
+    const wrapper = mount(
+        <Businesses />
+    );
+    
+    wrapper.unmount()
+    expect(Businesses.prototype.componentWillUnmount).toHaveBeenCalled();
+  });
 
   // it('should call handleSubmit on form submit', ()=>{
   //   jest.spyOn(Login.prototype, 'handleSubmit');
@@ -78,31 +76,31 @@ describe('<Login />', () => {
   //     wrapper.find('form').simulate('submit');
   // });
   
-  it('should submit valid form', async () => {
-    const spy = jest.spyOn(Login.prototype, 'LoginUser');
+//   it('should submit valid form', async () => {
+//     const spy = jest.spyOn(Login.prototype, 'LoginUser');
     
-    const location = {'state':{'from':'/businesses'}};
-    const wrapper = mount(
-      <MemoryRouter>
-        <Login location={location} />
-      </MemoryRouter>
-    );
-    axios.post.mockImplementationOnce(
-      jest.fn(()=> Promise.resolve({ 
-        data:{success:true},
-        token:'#jsddvbsdcby33767ebybce' 
-      }))
-    )
-    const form = wrapper.find('form');
-    const email = form.find("input[type='email']");
-    const password = form.find("input[type='password']");
-    email.instance().value = 'a@gmail.com';
-    password.instance().value = "#x@123456";
-    await wrapper.find('form').simulate('submit');
-    expect(spy).toHaveBeenCalled();
+//     const location = {'state':{'from':'/businesses'}};
+//     const wrapper = mount(
+//       <MemoryRouter>
+//         <Login location={location} />
+//       </MemoryRouter>
+//     );
+//     axios.post.mockImplementationOnce(
+//       jest.fn(()=> Promise.resolve({ 
+//         data:{success:true},
+//         token:'#jsddvbsdcby33767ebybce' 
+//       }))
+//     )
+//     const form = wrapper.find('form');
+//     const email = form.find("input[type='email']");
+//     const password = form.find("input[type='password']");
+//     email.instance().value = 'a@gmail.com';
+//     password.instance().value = "#x@123456";
+//     await wrapper.find('form').simulate('submit');
+//     expect(spy).toHaveBeenCalled();
 
 
-  });
+//   });
 
   // describe('Form validation', ()=>{
 
