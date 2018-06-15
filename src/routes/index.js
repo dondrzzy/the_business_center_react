@@ -5,7 +5,7 @@ import Register from "../components/auth/Register";
 import Logout from "../components/auth/Logout";
 import Dashboard from "../components/Dashboard";
 import ForgotPassword from "../components/auth/ResetPassword";
-import Businesses from "../components/Businesses/Index";
+import Businesses from "../components/businesses/Index";
 import Business from "../components/Business";
 import PrivateRoute from "../components/auth/PrivateRoute";
 import {

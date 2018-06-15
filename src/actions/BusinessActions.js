@@ -43,10 +43,10 @@ export const getUserBusinesses = () =>{
         })
     )
     .catch(function (error) {
-        dispatcher.dispatch({
-            type:"LOAD_BUSINESSES",
-            data: error.response.data
-        });
+        // dispatcher.dispatch({
+        //     type:"LOAD_BUSINESSES",
+        //     data: error.response.data
+        // });
     });
 }
 

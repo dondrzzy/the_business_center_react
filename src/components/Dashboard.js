@@ -19,6 +19,10 @@ export default class Dashboard extends Component{
                 next_page:null,
                 prev_page:null
             },
+            params:{
+                limit:5,
+                page:1
+            },
             redirect:false,
             formValidated : "",
             processing : false,
@@ -72,7 +76,6 @@ export default class Dashboard extends Component{
             processing:false
         });
     }
-
     loadUserBusinesses = () =>{
         this.setState({
             businessWrap:BusinessStore.getBusinesses()
@@ -87,9 +90,6 @@ export default class Dashboard extends Component{
         let nameRes = this.handleNameValidation(this.refs.name.value);
         let categoryRes = this.handleCategoryValidation(this.refs.category.value);
         let locationRes = this.handleLocationValidation(this.refs.location.value);
-        console.log('name', nameRes);
-        console.log('cat', categoryRes);
-        console.log('loc', locationRes);
         this.setState({formValidated : "wasValidated"})
         if( nameRes && categoryRes && locationRes ){
             this.setState({loaderStyle:{display:"inline-block"}, processing:true});
@@ -127,12 +127,12 @@ export default class Dashboard extends Component{
     }
     validateName = (name) =>{
         // eslint-disable-next-line to the line before.
-            const regex = new RegExp(/^[a-zA-Z ]{2,30}$/);
-            if (regex.test(name)) {
-                return true;
-            }else {
-                return false;
-            }
+        const regex = new RegExp(/^[a-zA-Z ]{2,30}$/);
+        if (regex.test(name)) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
     handleCategoryValidation = (cat) =>{
@@ -158,12 +158,12 @@ export default class Dashboard extends Component{
     }
     validateCategory = (cat) =>{
         // eslint-disable-next-line to the line before.
-            const regex = new RegExp(/^[a-zA-Z ]{2,30}$/);
-            if (regex.test(cat)) {
-                return true;
-            }else {
-                return false;
-            }
+        const regex = new RegExp(/^[a-zA-Z ]{2,30}$/);
+        if (regex.test(cat)) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
     handleLocationValidation = (loc) =>{
@@ -189,19 +189,41 @@ export default class Dashboard extends Component{
     }
     validateLocation = (loc) =>{
         // eslint-disable-next-line to the line before.
-            const regex = new RegExp(/^[a-zA-Z ]{2,30}$/);
-            if (regex.test(loc)) {
-                return true;
-            }else {
-                return false;
-            }
+        const regex = new RegExp(/^[a-zA-Z ]{2,30}$/);
+        if (regex.test(loc)) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
     handleModalClosed = ()=>{
         this.setState({loaderStyle : {display:"none"}});
     }
+    setParams(params){
+        if(this.refs.businesses) this.setState({ params });
+    }
+    encodeQueryData(){
+        let params = this.state.params;
+        let urlParams = [];
+        for (let i in params){
+            if(i === 'page' && params[i] !== 1)
+                urlParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(params[i]));
+            else if(i === 'limit' && params[i] !== 5)
+                urlParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(params[i]));
+        }
+        if(this.refs.dashboard){
+            window.location.assign(this.props.location.pathname + "?" + urlParams.join('&'));
+        }
+    }
 
-    
+    handleLimitChange = event => {
+        let params = this.state.params;
+        params['limit'] = parseInt(event.target.value);
+        this.setParams(params);
+        this.encodeQueryData();
+    }
+
     render(){
         let {prev_page} = this.state.businessWrap;
         let {next_page} = this.state.businessWrap;
@@ -245,7 +267,7 @@ export default class Dashboard extends Component{
         }
 
         return(
-            <div id="dashboard">
+            <div ref="dashboard" id="dashboard">
                 <div className="row">
                     <ToastContainer />
                     <div className="col">
@@ -263,7 +285,6 @@ export default class Dashboard extends Component{
                                 <button type="button" className="btn btn-outline-primary" data-toggle="modal" data-target="#bregisterModal">
                                     Register Business
                                 </button>
-
                             </div>
                         </div>
                     </div>
@@ -277,6 +298,14 @@ export default class Dashboard extends Component{
                         </h4>
                         <nav aria-label="Page navigation example">
                             <ul className="pagination justify-content-end">
+                                <li className="page-item disabled"><span className="page-link">Per page:</span></li>
+                                <li className="page-item">
+                                    <select value={this.state.params.limit} ref="limit" id="limit" onChange={this.handleLimitChange}>
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                    </select>
+                                </li>
                                 {prev}
                                 <li className="page-item active"><a className="page-link" href="#">{curr}</a></li>
                                 {next}

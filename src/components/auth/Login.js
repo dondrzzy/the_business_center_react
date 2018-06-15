@@ -37,8 +37,8 @@ class Login extends Component{
         UserStore.removeListener("change", this.LoginUser);
         UserStore.removeListener("error", this.showLoginErrors);
     }
+
     LoginUser() {
-        console.log('done')
         this.setState({
             loaderStyle:{display:"none"},
             redirectToReferrer : UserStore.isLoggedIn()
@@ -120,9 +120,7 @@ class Login extends Component{
         if(emailRes && passwordRes){
             console.log('submitting');
             this.setState({loaderStyle:{display:"inline-block"} , processing:true})
-            UserActions.authenticateUser({email:email, password:password});
-        }else{
-            console.log("invalid form");
+            UserActions.authenticate_user({email:email, password:password});
         }
     }
 
@@ -131,8 +129,6 @@ class Login extends Component{
         const { redirectToReferrer } = this.state;
         const { from } = this.props.location.state ? this.props.location.state : { from : {pathname : '/dashboard'}}
         if(redirectToReferrer === true){
-            console.log('redirecting');
-            console.log(this.state);
             return(
                 <Redirect to={from} />
             )

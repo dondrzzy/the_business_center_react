@@ -31,9 +31,10 @@ export default class BusinessItem extends Component{
     componentWillUnmount(){
         BusinessStore.removeListener('review_posted', this.updateBusinessReviews);
         BusinessStore.removeListener('login_required', this.requestLogin);
-        BusinessStore.on('reviews_change', this.getReviews);
+        BusinessStore.removeListener('reviews_change', this.getReviews);
     }
     showPostForm(){
+
         this.setState({formMounted:true});
     }
     hidePostForm(){

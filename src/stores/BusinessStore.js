@@ -22,7 +22,6 @@ export class BusinessStore extends EventEmitter{
     }
 
     loadBusinesses(res){
-        console.log(res);
         if(res.success){
             this.businessWrap = res;
             this.emit('change');
