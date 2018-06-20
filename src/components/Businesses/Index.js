@@ -24,29 +24,24 @@ export default class Businesses extends Component{
         this.handleLimitChange = this.handleLimitChange.bind(this);
     }
     componentWillMount() {
-        let query = new URLSearchParams(this.props.location.search);
-        console.log('************************', query);
-        let params = this.state.params;
-        params['q'] = query.get('q') ? query.get('q') : params['q'];
-        params['limit'] = query.get('limit') ? query.get('limit') : params['limit'];
-        params['category'] = query.get('category') ? query.get('category') : params['category'];
-        params['location'] = query.get('location') ? query.get('location') : params['location'];
-        params['page'] = query.get('page') ? query.get('page') : params['page'];
-        this.setParams(params);
         BusinessStore.on('change', this.getBusinesses);
     }
-    componentDidMount(){
-        BusinessActions.getBusinesses(this.props.location.search);
+    componentWillUnmount() {
+        BusinessStore.removeListener('change', this.getBusinesses);
     }
-    setParams(params){
+    componentDidMount() {
+        BusinessActions.getBusinesses();
+    }
+    setParams(params) {
         if(this.refs.businesses) this.setState({ params });
     }
-    getBusinesses(){
+    getBusinesses() {
         this.setState({
             businessWrap: BusinessStore.getBusinesses()
         });
     }
-    encodeQueryData(){
+    encodeQueryData() {
+        console.log('encoding query data')
         let params = this.state.params;
         let urlParams = [];
         for (let i in params){
@@ -64,14 +59,19 @@ export default class Businesses extends Component{
             }
         }
         if(this.refs.businesses){
-            window.location.assign(this.props.location.pathname + "?" + urlParams.join('&'));
+            console.log('params', urlParams.join('&'))
+            BusinessActions.getBusinesses("?" + urlParams.join('&'));
         }
     }
-    handleSubmit(e){
+    handleSubmit(e) {
+        console.log('handle submit');
          e.preventDefault();
         let q = this.refs.q.value;
         let category = this.refs.category.value;
         let location = this.refs.location.value;
+        console.log(q)
+        console.log(category)
+        console.log(location)
         if(q || category || location)
             this.encodeQueryData();
     }
@@ -133,15 +133,15 @@ export default class Businesses extends Component{
                             <form className="form-inline" onSubmit={this.handleSubmit.bind(this)}>
                                 <div className="form-group col-md-3 mx-sm-3 mb-2">
                                     <label htmlFor="q" className="sr-only">Search</label>
-                                    <input type="text" value={this.state.params.q} onChange={this.handleChangeSearch.bind(this)} className="form-control" ref="q" placeholder="Search By Name" />
+                                    <input type="text" name="q" value={this.state.params.q} onChange={this.handleChangeSearch.bind(this)} className="form-control" ref="q" placeholder="Search By Name" />
                                 </div>
                                 <div className="form-group col-md-3 mx-sm-3 mb-2">
                                     <label htmlFor="category" className="sr-only">Category</label>
-                                    <input type="text" value={this.state.params.category} onChange={this.handleChangeCategory.bind(this)}  className="form-control" ref="category" placeholder="Category" />
+                                    <input type="text" name="category" value={this.state.params.category} onChange={this.handleChangeCategory.bind(this)}  className="form-control" ref="category" placeholder="Category" />
                                 </div>
                                 <div className="form-group col-md-3 mx-sm-3 mb-2">
                                     <label htmlFor="location" className="sr-only">Location</label>
-                                    <input type="text" value={this.state.params.location} onChange={this.handleChangeLocation.bind(this)} className="form-control" ref="location" placeholder="Location" />
+                                    <input type="text" name="location" value={this.state.params.location} onChange={this.handleChangeLocation.bind(this)} className="form-control" ref="location" placeholder="Location" />
                                 </div>
                                 <div className="form-group col-md-3 mx-sm-3 mb-2">
                                     <button type="submit" className="btn btn-primary">Submit</button>
@@ -161,7 +161,7 @@ export default class Businesses extends Component{
                             <ul className="pagination justify-content-end">
                                 <li className="page-item disabled"><span className="page-link">Per page:</span></li>
                                 <li className="page-item">
-                                    <select value={this.state.params.limit} ref="limit" id="limit" onChange={this.handleLimitChange}>
+                                    <select value={this.state.params.limit} name="limit" ref="limit" id="limit" onChange={this.handleLimitChange}>
                                         <option value="5">5</option>
                                         <option value="10">10</option>
                                         <option value="15">15</option>

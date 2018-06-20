@@ -12,8 +12,7 @@ describe('<Logout />', () => {
     jest.spyOn(Logout.prototype, 'componentWillUnmount');
     axios.post.mockImplementationOnce(
       jest.fn(()=> Promise.resolve({ 
-        data:{success:true},
-        message:'Successfully logged out' 
+        data:{success:true, message:'Successfully logged out'}
       }))
     )
     const wrapper = await mount(

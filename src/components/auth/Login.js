@@ -25,20 +25,20 @@ class Login extends Component{
             validPassword : false,
             passwordMessage : "This field is required"
         }
-        this.LoginUser = this.LoginUser.bind(this);
+        this.loginUser = this.loginUser.bind(this);
         this.showLoginErrors = this.showLoginErrors.bind(this);
     }
 
     componentWillMount(){
-        UserStore.on('change', this.LoginUser);
+        UserStore.on('change', this.loginUser);
         UserStore.on('error', this.showLoginErrors);
     }
     componentWillUnmount() {
-        UserStore.removeListener("change", this.LoginUser);
+        UserStore.removeListener("change", this.loginUser);
         UserStore.removeListener("error", this.showLoginErrors);
     }
 
-    LoginUser() {
+    loginUser() {
         this.setState({
             loaderStyle:{display:"none"},
             redirectToReferrer : UserStore.isLoggedIn()
@@ -120,7 +120,7 @@ class Login extends Component{
         if(emailRes && passwordRes){
             console.log('submitting');
             this.setState({loaderStyle:{display:"inline-block"} , processing:true})
-            UserActions.authenticate_user({email:email, password:password});
+            UserActions.authenticateUser({email:email, password:password});
         }
     }
 

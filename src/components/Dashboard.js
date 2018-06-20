@@ -7,7 +7,7 @@ import * as BusinessActions from '../actions/BusinessActions';
 import { ToastContainer, toast } from 'react-toastify';
 import { css } from 'glamor';
 import $ from 'jquery';
-import BusinessItem from './Businesses/BusinessItem';
+import BusinessItem from './businesses/BusinessItem';
 
 
 export default class Dashboard extends Component{

@@ -2,11 +2,11 @@ import dispatcher from "../dispatcher";
 import axios from "axios";
 
 export const getBusinesses = (searchStr) =>{
-    axios({
-        method: 'get',
-        url: 'http://127.0.0.1:5000/api/v1/businesses'+searchStr,
+    console.log('gettting Businesses')
+    axios.get('http://127.0.0.1:5000/api/v1/businesses'+searchStr,
+    {
         headers: {
-            'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
         }
     })
     .then(response=> 

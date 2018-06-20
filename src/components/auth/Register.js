@@ -169,7 +169,6 @@ export default class Register extends Component{
         }
     }
     handleNameValidation(name){
-        console.log(name.trim());
         if(!name.trim()){
             this.setState({
                 nameClassName:"form-control is-invalid",
