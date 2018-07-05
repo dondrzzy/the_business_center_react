@@ -146,11 +146,11 @@ export default class Businesses extends Component{
         let {prev_page} = this.state.businessWrap;
         let {next_page} = this.state.businessWrap;
         
-        let prev = prev_page != ''
+        let prev = prev_page
         ? <li className="page-item"><a className="page-link" id="prev-link" onClick={ () => this.handleSetPage(prev_page)} href="#">Previous</a></li>
         : <li className="page-item disabled"><span className="page-link off">Previous</span></li>
     
-        let next = next_page != ''
+        let next = next_page
         ? <li className="page-item"><a className="page-link" id="next-link" onClick={ () => this.handleSetPage(next_page)} href="#">Next</a></li>
         : <li className="page-item disabled"><span className="page-link off">Next</span></li>
         let curr = next_page ? next_page-1:prev_page+1;
