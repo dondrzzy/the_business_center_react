@@ -10,17 +10,18 @@ export default class Navbar extends Component{
         }
         this.changeLoginState = this.changeLoginState.bind(this);
     }
-    componentWillMount(){
+    componentWillMount = () => {
         UserStore.on('change', this.changeLoginState);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount = () => {
         UserStore.removeListener("change", this.changeLoginState);
     }
-    changeLoginState(){
+
+    changeLoginState = () => {
         this.setState({isAuthenticated:UserStore.isLoggedIn()});
     }
-    render(){
+    render = () => {
         let defaultNav = <ul className="nav navbar-nav ml-auto">
                             <li className="nav-item">
                                 <NavLink className="nav-link" activeClassName="active" to="/login">Login</NavLink>

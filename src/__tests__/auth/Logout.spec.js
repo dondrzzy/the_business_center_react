@@ -9,18 +9,14 @@ import axios from 'axios';
 describe('<Logout />', () => {
   
   it('should call lifecycle methods', async ()=>{
-    jest.spyOn(Logout.prototype, 'componentWillUnmount');
     axios.post.mockImplementationOnce(
       jest.fn(()=> Promise.resolve({ 
         data:{success:true, message:'Successfully logged out'}
       }))
-    )
-    const wrapper = await mount(
-      <MemoryRouter>
-        <Logout />
-      </MemoryRouter>
     );
-    wrapper.unmount()
-    expect(Logout.prototype.componentWillUnmount).toHaveBeenCalled();
+    const wrapper = await shallow(
+      <Logout />
+  );
+  expect(wrapper.state().redirectToLogin).toBeTruthy()
   });
 });

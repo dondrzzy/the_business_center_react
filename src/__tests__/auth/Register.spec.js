@@ -5,62 +5,43 @@ import { MemoryRouter } from 'react-router-dom';
 import * as UserActions from '../../actions/UserActions';
 import UserStore from '../../stores/UserStore';
 import axios from 'axios';
+import { after } from 'glamor';
 
 describe('<Register />', () => {
-  
-  it('should call lifecycle methods', ()=>{
-    jest.spyOn(Register.prototype, 'componentWillUnmount');
-    const wrapper = mount(
-      <MemoryRouter>
-        <Register />
-      </MemoryRouter>
-    );
-    wrapper.unmount()
-    expect(Register.prototype.componentWillUnmount).toHaveBeenCalled();
-  });
-
-  it('should submit valid form', ()=>{
-    jest.mock('../../actions/UserActions');
-    const spy = jest.spyOn(UserActions, 'registerUser');
-    
-    const location = {'state':{'from':'/login'}};
-    const wrapper = mount(
+	let wrapper,
+			component;
+	let location = {'state':{'from':'/login'}};
+  beforeEach(() => {
+		wrapper = mount(
       <MemoryRouter>
         <Register location={location} />
       </MemoryRouter>
-    );
+		);
+	});
+	
+	afterEach(() => {
+		wrapper.unmount();
+	})
+
+  it('should submit valid form', ()=>{
+    const spy = jest.spyOn(UserActions, 'registerUser');
     const form = wrapper.find('form');
-    const name = form.find("input[type='text']");
-    const email = form.find("input[name='email']");
-    const password = form.find("input[name='password']");
-    const confirmPassword = form.find("input[name='confirmPassword']");
-    name.instance().value = 'donald sibo';
-    email.instance().value = 'a@gmail.com';
-    password.instance().value = "#x@123456";
-    confirmPassword.instance().value = "#x@123456";
+    form.find("input[type='text']").instance().value = 'donald sibo';
+    form.find("input[name='email']").instance().value = 'a@gmail.com';
+    form.find("input[name='password']").instance().value = "#x@123456";
+    form.find("input[name='confirmPassword']").instance().value = "#x@123456";
     wrapper.find('form').simulate('submit');
     expect(spy).toHaveBeenCalled();
   });
 
   describe('Form validation', ()=>{
-    
     it('should validate empty form inputs', ()=>{
-      const location = {'state':{'from':'/login'}};
-      const wrapper = mount(
-        <MemoryRouter>
-          <Register location={location}/>
-        </MemoryRouter>
-      );
       expect(wrapper.find('Register').instance().state.formValidated).toEqual('');
       const form = wrapper.find('form');
-      const name = form.find("input[type='text']");
-      const email = form.find("input[name='email']");
-      const password = form.find("input[name='password']");
-      const confirmPassword = form.find("input[name='confirmPassword']");
-      name.instance().value = '';
-      email.instance().value = '';
-      password.instance().value = '';
-      confirmPassword.instance().value = '';
+      form.find("input[type='text']").instance().value = '';
+      form.find("input[name='email']").instance().value = '';
+      form.find("input[name='password']").instance().value = '';
+      form.find("input[name='confirmPassword']").instance().value = '';
       form.simulate('submit');
       expect(wrapper.find('Register').instance().state.formValidated).toEqual('wasValidated');
       expect(wrapper.find('.feedback.invalid-feedback').first().text())
@@ -68,48 +49,26 @@ describe('<Register />', () => {
     });
 
     it('should show invalid form inputs', ()=>{
-      const location = {'state':{'from':'/login'}};
-      const wrapper = mount(
-        <MemoryRouter>
-          <Register location={location}/>
-        </MemoryRouter>
-      );
       expect(wrapper.find('.feedback.invalid-feedback').first().text())
         .toContain('This field is required');
-
       const form = wrapper.find('form');
-      const name = form.find("input[type='text']");
-      const email = form.find("input[name='email']");
-      const password = form.find("input[name='password']");
-      const confirmPassword = form.find("input[name='confirmPassword']");
-      name.instance().value = 'a';
-      email.instance().value = 'a';
-      password.instance().value = '';
-      confirmPassword.instance().value = 'a';
+      form.find("input[type='text']").instance().value = 'a';
+      form.find("input[name='email']").instance().value = 'a';
+      form.find("input[name='password']").instance().value = '';
+      form.find("input[name='confirmPassword']").instance().value = 'a';
       form.simulate('submit');
       expect(wrapper.find('.feedback.invalid-feedback').first().text())
-        .toContain('Please enter a valid email');
+        .toContain('Please enter a valid name');
     });
 
     it('should check for password mismatch', ()=>{
-      const location = {'state':{'from':'/login'}};
-      const wrapper = mount(
-        <MemoryRouter>
-          <Register location={location}/>
-        </MemoryRouter>
-      );
       expect(wrapper.find('Register').instance().state.confirmPasswordMessage)
         .toEqual("This field is required");
-
       const form = wrapper.find('form');
-      const name = form.find("input[type='text']");
-      const email = form.find("input[name='email']");
-      const password = form.find("input[name='password']");
-      const confirmPassword = form.find("input[name='confirmPassword']");
-      name.instance().value = 'a';
-      email.instance().value = 'a';
-      password.instance().value = 'b';
-      confirmPassword.instance().value = 'a';
+      form.find("input[type='text']").instance().value = 'a';
+      form.find("input[name='email']").instance().value = 'a';
+      form.find("input[name='password']").instance().value = 'b';
+      form.find("input[name='confirmPassword']").instance().value = 'a';
       form.simulate('submit');
       expect(wrapper.find('Register').instance().state.confirmPasswordMessage)
         .toEqual("Passwords do not match");

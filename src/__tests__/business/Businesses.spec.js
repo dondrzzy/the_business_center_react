@@ -1,108 +1,74 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import Businesses from '../../components/businesses/index';
-// import { MemoryRouter } from 'react-router-dom';
+import Businesses from '../../components/businesses/Businesses';
 import * as BusinessActions from '../../actions/BusinessActions';
-import BusinessStore from '../../stores/BusinessStore';
+import { MemoryRouter } from 'react-router-dom';
 import axios from 'axios';
-import renderer from 'react-test-renderer';
 
-
-describe('<Businesses />', () => {
-  axios.get.mockImplementationOnce(
+describe(<Businesses />, () => {
+  let wrapper;
+  beforeEach(() => {
+    axios.get.mockImplementation(
       jest.fn(()=> Promise.resolve({
         data:{
-          success:true
+          success: true,
+          businesses: [],
+          categories: [
+            {
+              category: 'IT',
+              status:'Approved',
+              id: 1
+            }
+          ],
+          total: 0,
+          next_page: '',
+          prev_page: 1
         }
       }))
-    )
-
-  it('should call lifecycle methods', ()=>{
-    jest.spyOn(Businesses.prototype, 'componentWillUnmount');
-    
-    const wrapper = mount(
-      <Businesses />
     );
-    wrapper.unmount()
-    expect(Businesses.prototype.componentWillUnmount).toHaveBeenCalled();
-  });
-
-  it('should call getBusinesses', async () => {
-    const spy = jest.spyOn(Businesses.prototype, 'getBusinesses');
-     axios.get.mockImplementationOnce(
-        jest.fn(()=> Promise.resolve({ 
-          data:{
-            success:true,
-            businesses:[],
-            next_page:'2',
-            prev_page: ''
-          }
-        }))
-      )
-    const wrapper = mount(
+    wrapper = mount(
     	<Businesses />
     );
-    const form = wrapper.find('form');
-    const name = form.find("input[name='q']");
-    const category = form.find("input[name='category']");
-    const location = form.find("input[name='category']");
-    name.instance().value = 'Business';
-    category.instance().value = "Category";
-    location.instance().value = 'Location';
-    await wrapper.find('form').simulate('submit');
-    console.log(wrapper.state())
-    expect(spy).toHaveBeenCalled()
+  })
+
+  afterEach( () => {
+    wrapper.unmount()
+  });
+  
+
+  it('should validate empty search fields', ()=>{
+    wrapper.find('form').simulate('submit');
+    expect(wrapper.find('.feedback').html()).toContain('Please fill any of the form fields');
   });
 
-  // it('should call handleChangeSearch on search change', () => {
-  //   const spy = jest.spyOn(Businesses.prototype, 'handleChangeSearch');
-  //   const event = {target: {name: 'q', value: 'spam'}}
-  //   const wrapper = mount(
-  //   	<Businesses />
-  //   );
-  //   wrapper.find("input[name='q']").simulate('change', event);
-  //   expect(spy).toHaveBeenCalled()
-  // });
-  // it('should call handleChangeCategory on category change', () => {
-  //   const spy = jest.spyOn(Businesses.prototype, 'handleChangeCategory');
-  //   const event = {target: {name: 'category', value: 'spam'}}
-  //   const wrapper = mount(
-  //   	<Businesses />
-  //   );
-  //   wrapper.find("input[name='category']").simulate('change', event);
-  //   expect(spy).toHaveBeenCalled();
-  // });
-  // it('should call handleChangeLocation on location change', () => {
-  //   const spy = jest.spyOn(Businesses.prototype, 'handleChangeLocation');
-  //   const event = {target: {name: 'location', value: 'spam'}}
-  //   const wrapper = mount(
-  //   	<Businesses />
-  //   );
-  //   wrapper.find("input[name='location']").simulate('change', event);
-  //   expect(spy).toHaveBeenCalled();
-  // });
-  // it('should call handleLimitChange on limit change', () => {
-  //   const spy = jest.spyOn(Businesses.prototype, 'handleLimitChange');
-  //   const event = {target: {name: 'limit', value: '50'}}
-  //   const wrapper = mount(
-  //   	<Businesses />
-  //   );
-  //   wrapper.find("select[name='limit']").simulate('change', event);
-  //   expect(spy).toHaveBeenCalled();
-  // });
-  // it('should call handleSetPage on page change', () => {
-  //   const spy = jest.spyOn(Businesses.prototype, 'handleSetPage');
-  //   const wrapper = mount(
-  //   	<Businesses />
-  //   );
-  //   wrapper.setState({
-  //     businessWrap : {
-  //       businesses:[],
-  //       next_page:'2',
-  //       prev_page:''
-  //     }
-  //   });
-  //   wrapper.find("a[className='page-link']").simulate('click');
-  //   expect(spy).toHaveBeenCalled();
-  // });
+  it('should validate submit valid search form', ()=>{
+    const spy = jest.spyOn(BusinessActions, 'getBusinesses');
+    wrapper.find("input[name='q']").simulate('change', {target :{value: 'andela'}});
+    wrapper.find("input[name='location']").simulate('change', {target :{value: 'andela'}});
+    wrapper.find("select[name='category']").simulate('change', {target :{value: '1'}});
+    wrapper.find('form').simulate('submit');
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should change limit', ()=>{
+    const spy = jest.spyOn(BusinessActions, 'getBusinesses');
+    wrapper.find("select[name='limit']").simulate('change', {target :{value: '10'}});
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should change paginate', ()=>{
+    wrapper = shallow(<Businesses/>);
+    wrapper.setState({
+      businessWrap:{
+        businesses: [],
+        next_page: 3,
+        prev_page: 2,
+        categories: []
+      }
+    });
+    console.log(wrapper.state());
+    wrapper.find("#prev-link").simulate('click');
+    expect(wrapper.state().params.page).toEqual(2);
+
+  });
 })

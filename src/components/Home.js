@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { Route, Link } from 'react-router-dom';
 
-export default class extends Component{
-  render(){
+export default class Home extends Component{
+  render = () => {
     return (
         <div className="row Home">
             <div className="col-12">
@@ -12,14 +12,11 @@ export default class extends Component{
                     <hr />     
                     <div>
                         <div className="text-center">
-                            <Link to="/login" className="btn btn-primary">Login</Link>
-                            <Link to="/register" className="btn btn-success">Register</Link>
+                            <Link id="loginBtn" to="/login" className="btn btn-primary">Login</Link>
+                            <Link id="registerBtn" to="/register" className="btn btn-success">Register</Link>
                         </div>
-                    </div>
-                        
+                    </div>  
                 </div>
-
-                
             </div>
         </div>
     )

@@ -138,3 +138,35 @@ ul.reviews li span.mini-border-bottom{
   background-color: #007bff!important;
   color: #fff!important;
 }
+#img-loader{
+  display: block;
+  margin: auto;
+}
+.off{
+  color: #e1d7cb!important;
+}
+.owner-btn{
+  display: inline;
+}
+.sweet-alert button{
+  font-size: 11px!important;
+  text-transform: UPPERCASE!important;
+}
+.no-margin-bottom{
+  margin-bottom: 0px !important;
+}
+.mr1{
+  margin-right: 0.5rem;
+}
+.u-b .dropdown-item{
+  color: #292b2c!important;
+}
+.review-wrapper{
+  margin-top:1rem;
+}
+ul.reviews{
+  background: rgb(248, 248, 248);
+}
+p.badge{
+  margin-bottom: 0!important;
+}

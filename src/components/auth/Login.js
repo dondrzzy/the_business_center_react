@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link,Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import UserStore from '../../stores/UserStore';
 import * as UserActions from '../../actions/UserActions';
 import { ToastContainer, toast } from 'react-toastify';
@@ -14,6 +14,8 @@ class Login extends Component{
     constructor(){
         super();
         this.state = {
+            email: "",
+            password: "",
             redirectToReferrer:false,
             formValidated : "",
             processing : false,
@@ -25,28 +27,41 @@ class Login extends Component{
             validPassword : false,
             passwordMessage : "This field is required"
         }
-        this.loginUser = this.loginUser.bind(this);
-        this.showLoginErrors = this.showLoginErrors.bind(this);
     }
 
-    componentWillMount(){
+    componentWillMount = () => {
         UserStore.on('change', this.loginUser);
         UserStore.on('error', this.showLoginErrors);
     }
-    componentWillUnmount() {
+    componentDidMount = () => {
+        let report = UserStore.getPendingReport();
+        if(report && report.status === "success"){
+            toast.success(report.message, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: false,
+            });
+        }else if(report && report.status === "error") {
+            toast.error(report.message, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: false,
+            });
+        }
+    }
+    componentWillUnmount = () =>  {
         UserStore.removeListener("change", this.loginUser);
         UserStore.removeListener("error", this.showLoginErrors);
     }
 
-    loginUser() {
+    loginUser = () => {
+        console.log('****')
         this.setState({
             loaderStyle:{display:"none"},
-            redirectToReferrer : UserStore.isLoggedIn()
+            // redirectToReferrer : UserStore.isLoggedIn()
         });
     }
 
-    showLoginErrors(){
-        toast.error(UserStore.get_response(), {
+    showLoginErrors = () => {
+        toast.error(UserStore.getResponse(), {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: false,
         });
@@ -59,7 +74,7 @@ class Login extends Component{
         });
     }
     
-    handlePasswordValidation(password){
+    handlePasswordValidation = password => {
         if(!password.trim()){
             this.setState({
                 passwordClassName:"form-control is-invalid",
@@ -76,7 +91,7 @@ class Login extends Component{
         }
         return false;
     }
-    validateEmail(email){
+    validateEmail = email => {
         // eslint-disable-next-line to the line before.
         const regExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
         if(regExp.test(email)){
@@ -85,7 +100,7 @@ class Login extends Component{
             return false;
         }
     }
-    handleEmailValidation(email){
+    handleEmailValidation = email => {
         if(!email.trim()){
             this.setState({
                 emailClassName:"form-control is-invalid",
@@ -111,30 +126,38 @@ class Login extends Component{
         return false;
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
-        let email =  this.refs.email.value;
-        let password =  this.refs.password.value;
+    handleSubmit = event => {
+        event.preventDefault();
+        let email =  this.state.email;
+        let password =  this.state.password;
         let emailRes = this.handleEmailValidation(email);
         let passwordRes = this.handlePasswordValidation(password);
         if(emailRes && passwordRes){
-            console.log('submitting');
             this.setState({loaderStyle:{display:"inline-block"} , processing:true})
             UserActions.authenticateUser({email:email, password:password});
         }
     }
 
+    handleEmailChange = event => {
+        this.setState({
+            email: event.target.value
+        });
+    }
 
-    render(){
+    handlePasswordChange = event => {
+        this.setState({
+            password: event.target.value
+        })
+    }
+
+    render = () => {
         const { redirectToReferrer } = this.state;
         const { from } = this.props.location.state ? this.props.location.state : { from : {pathname : '/dashboard'}}
-        if(redirectToReferrer === true){
+        if(redirectToReferrer === true || UserStore.isLoggedIn() === true){
             return(
                 <Redirect to={from} />
             )
         }
-        
-
         let validEmail = <div className="feedback valid-feedback">Looks good</div>
         let invalidEmail = <div className="feedback invalid-feedback">{this.state.emailMessage}</div>
         let emailFeedback = this.state.validEmail ? validEmail : invalidEmail;
@@ -149,12 +172,14 @@ class Login extends Component{
                 <div className="col-md-6 SignIn">
                     <ToastContainer />
                     <h3 className="text-center">Login</h3>
-                    <form disabled={disabled} onSubmit={this.handleSubmit.bind(this)} className={this.state.formValidated} noValidate>
+                    <form disabled={disabled} onSubmit={this.handleSubmit} className={this.state.formValidated} noValidate>
                         <div className="form-group">
                             <label className="col-form-label" htmlFor="email">Email:</label>
                             <input
                                 disabled={disabled}
-                                type="email" ref="email" name="email"
+                                type="email" name="email"
+                                value={this.state.email}
+                                onChange={this.handleEmailChange}
                                 className={this.state.emailClassName}
                                 placeholder="Email address"
                             />
@@ -162,7 +187,14 @@ class Login extends Component{
                         </div>
                         <div className="form-group">
                             <label className="col-form-label" htmlFor="password">Password:</label>
-                            <input disabled={disabled} type="password" name="password" ref="password" className={this.state.passwordClassName} placeholder="Password" />
+                            <input 
+                                disabled={disabled}
+                                type="password"
+                                name="password"
+                                value={this.state.password}
+                                onChange={this.handlePasswordChange}
+                                className={this.state.passwordClassName}
+                                placeholder="Password" />
                             {passwordFeedback}
                         </div>
                         <div className="form-group">

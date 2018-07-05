@@ -7,104 +7,101 @@ import UserStore from '../../stores/UserStore';
 import axios from 'axios';
 
 describe('<ResetPassword />', () => {
-  
-  it('should call lifecycle methods', ()=>{
-    jest.spyOn(ResetPassword.prototype, 'componentWillUnmount');
-    const wrapper = mount(
+  let wrapper,
+      component;
+  let location = {'state':{'from':'/login'}};
+  let match = {params:{token:"hsdhjgvdgvhsd"}}
+  beforeEach(() => {
+    axios.post.mockImplementation(
+      jest.fn(()=> Promise.resolve({ 
+        data:{
+          success:true,
+          user:'abc@gmail.com' 
+          }
+      }))
+    )
+    wrapper = shallow(
       <MemoryRouter>
-        <ResetPassword />
+        <ResetPassword location={location} match={match} />
       </MemoryRouter>
     );
+    component = wrapper.find(ResetPassword).dive()
+  });
+  afterEach(() => {
     wrapper.unmount()
-    expect(ResetPassword.prototype.componentWillUnmount).toHaveBeenCalled();
-  });
+  })
 
-  it('should submit valid form', ()=>{
-    jest.mock('../../actions/UserActions');
-    const spy = jest.spyOn(UserActions, 'resetPassword');
-    
-    const location = {'state':{'from':'/login'}};
-    const wrapper = mount(
+  it('should load <ResetPassword/> on valid token', async () => {
+    wrapper = await mount(
       <MemoryRouter>
-        <ResetPassword location={location} />
+        <ResetPassword location={location} match={match} />
       </MemoryRouter>
     );
-    const form = wrapper.find('form');
-    const email = form.find("input[name='email']");
-    const password = form.find("input[name='password']");
-    const confirmPassword = form.find("input[name='confirmPassword']");
-    email.instance().value = 'a@gmail.com';
-    password.instance().value = "#x@123456";
-    confirmPassword.instance().value = "#x@123456";
-    wrapper.find('form').simulate('submit');
-    expect(spy).toHaveBeenCalled();
+    expect(wrapper.find(ResetPassword)).toHaveLength(1);
+    wrapper.unmount()
+  });
+  it('should redirect to forgot password on invalid token', async ()=>{
+    axios.post.mockImplementationOnce(
+      jest.fn(()=> Promise.resolve({ 
+        data:{
+          success:false,
+          message:'Token expired' 
+          }
+      }))
+    )
+    wrapper = await mount(
+      <MemoryRouter>
+        <ResetPassword location={location} match={match} />
+      </MemoryRouter>
+    );
+    expect(wrapper.find(ResetPassword).instance().state.rediectToForgot).toBeTruthy();
   });
 
-  describe('Form validation', ()=>{
+  it('should validate empty form inputs', ()=>{
     
-    it('should validate empty form inputs', ()=>{
-      const location = {'state':{'from':'/login'}};
-      const wrapper = mount(
-        <MemoryRouter>
-          <ResetPassword location={location}/>
-        </MemoryRouter>
-      );
-      expect(wrapper.find('ResetPassword').instance().state.formValidated).toEqual('');
-      const form = wrapper.find('form');
-      const email = form.find("input[name='email']");
-      const password = form.find("input[name='password']");
-      const confirmPassword = form.find("input[name='confirmPassword']");
-      email.instance().value = '';
-      password.instance().value = '';
-      confirmPassword.instance().value = '';
-      form.simulate('submit');
-      expect(wrapper.find('ResetPassword').instance().state.formValidated).toEqual('wasValidated');
-      expect(wrapper.find('.feedback.invalid-feedback').first().text())
+    component.setState({
+      verified: true,
+      loaderStyle:{display:"none"},
+      resetUserEmail: 'abc@gmail.com',
+      alertMessage: "Account email: a@gmail.com"
+    })
+    console.log(component.state())
+    let form = component.find('form');
+    form.find("input[name='password']").simulate('change', {target: {value: ""}});
+    form.find("input[name='confirmPassword']").simulate('change', {target: {value: ""}});
+    form.simulate('submit', {preventDefault: () => {}});
+    expect(component.find('.feedback.invalid-feedback').first().text())
         .toContain('This field is required');
-    });
+    expect(component.state().formValidated).toContain('wasValidated');
+  });
 
-    it('should show invalid form inputs', ()=>{
-      const location = {'state':{'from':'/login'}};
-      const wrapper = mount(
-        <MemoryRouter>
-          <ResetPassword location={location}/>
-        </MemoryRouter>
-      );
-      expect(wrapper.find('.feedback.invalid-feedback').first().text())
-        .toContain('This field is required');
+  it('should validate invalid form inputs', ()=>{
+    component.setState({
+      verified: true,
+      loaderStyle:{display:"none"},
+      resetUserEmail: 'abc@gmail.com',
+      alertMessage: "Account email: a@gmail.com"
+    })
+    let form = component.find('form');
+    form.find("input[name='password']").simulate('change', {target: {value: "#aee"}});
+    form.find("input[name='confirmPassword']").simulate('change', {target: {value: "#secwe"}});
+    form.simulate('submit', {preventDefault: () => {}});
+    expect(component.find('.feedback.invalid-feedback').first().text())
+        .toContain('Password should have 6 - 35 characters');
+    expect(component.state().formValidated).toContain('wasValidated');
+  });
 
-      const form = wrapper.find('form');
-      const email = form.find("input[name='email']");
-      const password = form.find("input[name='password']");
-      const confirmPassword = form.find("input[name='confirmPassword']");
-      email.instance().value = 'a';
-      password.instance().value = '';
-      confirmPassword.instance().value = 'a';
-      form.simulate('submit');
-      expect(wrapper.find('.feedback.invalid-feedback').first().text())
-        .toContain('Please enter a valid email');
-    });
-
-    it('should check for password mismatch', ()=>{
-      const location = {'state':{'from':'/login'}};
-      const wrapper = mount(
-        <MemoryRouter>
-          <ResetPassword location={location}/>
-        </MemoryRouter>
-      );
-      expect(wrapper.find('ResetPassword').instance().state.confirmPasswordMessage)
-        .toEqual("This field is required");
-
-      const form = wrapper.find('form');
-      const email = form.find("input[name='email']");
-      const password = form.find("input[name='password']");
-      const confirmPassword = form.find("input[name='confirmPassword']");
-      email.instance().value = 'a';
-      password.instance().value = 'b';
-      confirmPassword.instance().value = 'a';
-      form.simulate('submit');
-      expect(wrapper.find('ResetPassword').instance().state.confirmPasswordMessage)
-        .toEqual("Passwords do not match");
-    });
+  it('should submit valid form inputs', async ()=>{
+    component.setState({
+      verified: true,
+      loaderStyle:{display:"none"},
+      resetUserEmail: 'abc@gmail.com',
+      alertMessage: "Account email: a@gmail.com"
+    })
+    let form = component.find('form');
+    form.find("input[name='password']").simulate('change', {target: {value: "#x@12345"}});
+    form.find("input[name='confirmPassword']").simulate('change', {target: {value: "#x@12345"}});
+    await form.simulate('submit', {preventDefault: () => {}});
+    expect(component.state().isReset).toBeTruthy();
   });
 });

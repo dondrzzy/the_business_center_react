@@ -4,9 +4,10 @@ import Login from "../components/auth/Login";
 import Register from "../components/auth/Register";
 import Logout from "../components/auth/Logout";
 import Dashboard from "../components/Dashboard";
-import ForgotPassword from "../components/auth/ResetPassword";
-import Businesses from "../components/businesses/Index";
-import Business from "../components/Business";
+import ForgotPassword from "../components/auth/ForgotPassword";
+import ResetPassword from "../components/auth/ResetPassword";
+import Businesses from "../components/businesses/Businesses";
+// import Business from "../components/Business";
 import PrivateRoute from "../components/auth/PrivateRoute";
 import {
     Route,
@@ -29,8 +30,9 @@ export default class Routes extends Component{
                     <Route path="/register" component={Register} />
                     <Route path="/logout" component={Logout} />
                     <Route path="/forgot_password" component={ForgotPassword} />
+                    <Route path="/reset_password/:token" render={(props) => <ResetPassword {...props} />} />
                     <Route exact path="/businesses" render={(props) => <Businesses {...props} />} />
-                    <Route path="/businesses/:id" component={Business} />
+                    {/* <Route path="/businesses/:id" component={Business} /> */}
                     <PrivateRoute path="/dashboard" component={Dashboard} />} />
                     <Route render={()=>(
                         <p>Not Found... If you manually entered the URL, edit it.</p>

@@ -11,17 +11,18 @@ class Logout extends Component{
         }
     }
 
-    logout(){
+    logout = () => {
         this.setState({redirectToLogin:true});
     }
-    componentWillMount(){
-        UserStore.on('change', this.logout.bind(this));
+    componentWillMount = () => {
+        UserStore.resetAuth();
+        UserStore.on('change', this.logout);
     }
-    componentDidMount(){
+    componentDidMount = () => {
         UserActions.logout();
     }
-    componentWillUnmount(){
-        UserStore.removeListener("change", this.logout.bind(this));
+    componentWillUnmount = () => {
+        UserStore.removeListener("change", this.logout);
     }
 
     render(){
