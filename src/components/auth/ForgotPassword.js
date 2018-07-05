@@ -5,6 +5,7 @@ import * as UserActions from '../../actions/UserActions';
 import { ToastContainer, toast } from 'react-toastify';
 import { css } from 'glamor';
 import { BusinessStore } from '../../stores/BusinessStore';
+import Gifs from '../../utils/gitImage';
 
 export default class ForgotPassword extends Component{
 
@@ -42,6 +43,7 @@ export default class ForgotPassword extends Component{
         }
     }
     
+    // display success message to the user
     resetPassword = () => {
         this.setState({
             loaderStyle:{display:"none"},
@@ -69,6 +71,7 @@ export default class ForgotPassword extends Component{
             return false;
         }
     }
+
     handleEmailValidation = email => {
         if(!email.trim()){
             this.setState({
@@ -91,6 +94,7 @@ export default class ForgotPassword extends Component{
         }
         return false;
     }
+
     handleSubmit = event => {
         event.preventDefault();
         let email =  this.state.email;
@@ -101,6 +105,7 @@ export default class ForgotPassword extends Component{
             UserActions.forgotPassword(email);
         }
     }
+
     handleEmailChange = event => {
         this.setState({
             email: event.target.value
@@ -140,14 +145,7 @@ export default class ForgotPassword extends Component{
                                 <img
                                     style={this.state.loaderStyle}
                                     // eslint-disable-next-line to the line before.
-                                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWph
-                                    eGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAA
-                                    AEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBo
-                                    VjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DY
-                                    lJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAA
-                                    ACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFV
-                                    dmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYR
-                                    gHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                    src={Gifs.getImageLoader()} />
                             </div>
                             <input type="submit" value="Send" disabled={disabled} className="btn btn-block btn-primary" />
                             <Link to="/" className="btn btn-default">Cancel</Link>

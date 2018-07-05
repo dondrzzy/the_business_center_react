@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import * as BusinessActions from '../../actions/BusinessActions';
 import BusinessStore from '../../stores/BusinessStore';
 import $ from 'jquery';
+import Gifs from '../../utils/gitImage';
 
 export default class UpdateBusiness extends Component{
     constructor(props){
@@ -37,6 +38,7 @@ export default class UpdateBusiness extends Component{
         });
     };
 
+    // hide modal view on succesfully updating a business
     showUpdate = () => {
         this.setState({
             processing: false,
@@ -45,6 +47,7 @@ export default class UpdateBusiness extends Component{
         $(this.state.dataTarget).hide();
         $('.modal-backdrop').remove();
         $('body').removeClass('modal-open')
+        // toast for only the matching business
         if(BusinessStore.getUpdatedBusiness().id === this.props.business.id)
             $(this.state.dataTarget).siblings('button').click()
     }
@@ -64,15 +67,18 @@ export default class UpdateBusiness extends Component{
             name: event.target.value
         });
     }
+
     handleLocationChange = event =>
         this.setState({
             location: event.target.value
         });
+
     handleCategoryChange = event =>{
         this.setState({
             category: event.target.value
         });
     }
+
     handleNameValidation = name => {
         if(!name.trim()){
             this.setState({
@@ -94,6 +100,7 @@ export default class UpdateBusiness extends Component{
         }
         return false;
     }
+
     validateName = name => {
         // eslint-disable-next-line to the line before.
         const regex = new RegExp(/^[a-zA-Z ]{2,30}$/);
@@ -156,6 +163,7 @@ export default class UpdateBusiness extends Component{
         }
         return false;
     }
+
     validateLocation = location => {
         // eslint-disable-next-line to the line before.
         const regex = new RegExp(/^[a-zA-Z ]{2,30}$/);
@@ -165,6 +173,7 @@ export default class UpdateBusiness extends Component{
             return false;
         }
     }
+
     handleSubmit = () => {
         let nameRes = this.handleNameValidation(this.state.name);
         let categoryRes = this.handleCategoryValidation(this.state.category);
@@ -182,6 +191,7 @@ export default class UpdateBusiness extends Component{
     }
 
     render(){
+        // create form error fields
         const { open } = this.state;
         let validField = <div className="feedback valid-feedback">Looks good</div>
         let validName = validField
@@ -246,14 +256,7 @@ export default class UpdateBusiness extends Component{
                             <img
                                 style={this.state.loaderStyle}
                                 // eslint-disable-next-line to the line before.
-                                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWph
-                                eGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAA
-                                AEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBo
-                                VjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DY
-                                lJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAA
-                                ACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFV
-                                dmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYR
-                                gHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                src={Gifs.getImageLoader()} />
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" onClick={this.handleSubmit} className="btn btn-primary">Save changes</button>
                         </div>

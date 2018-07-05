@@ -24,28 +24,39 @@ export default class BusinessItem extends Component{
             isLoggedIn: UserStore.isLoggedIn()
         }
     }
+
     componentWillMount(){
         BusinessStore.on('review_posted', this.updateBusinessReviews);
         BusinessStore.on('reviews_change', this.getReviews);
     }
+
     componentDidMount(){
         BusinessActions.getReviews(this.props.business.id);
     }
+
     componentWillUnmount(){
         BusinessStore.removeListener('review_posted', this.updateBusinessReviews);
         BusinessStore.removeListener('reviews_change', this.getReviews);
     }
+
+    // show form when user clicks post review
     showPostForm = () => {
         this.setState({formMounted:true});
     }
+
+    // hide form on cancel event
     hidePostForm = () => {
         this.setState({formMounted:false});
     }
+
+    // fetch business reviews on mounting the business
     getReviews = () => {
         if(BusinessStore.getCurrentId(this.props.business.id)){
             this.setState({reviews:BusinessStore.getReviews(this.props.business.id)});
         }
     }
+
+    // update the business reviews on successfully posting a review
     updateBusinessReviews = () => {
         if(BusinessStore.isReviewedBusiness(this.props.business.id)){
             BusinessActions.getReviews(this.props.business.id); 
@@ -53,6 +64,7 @@ export default class BusinessItem extends Component{
             console.log('---', this.state)
         }        
     }
+
     postReview = event => {
         let review = this.state.reviewValue;
         let reviewRes = this.handleReviewValidation(review);
@@ -63,6 +75,7 @@ export default class BusinessItem extends Component{
             BusinessActions.postReview(this.props.business.id, data);
         }        
     }
+
     handleReviewValidation = review => {
         if(!review.trim()){
             this.setState({
@@ -84,6 +97,7 @@ export default class BusinessItem extends Component{
         }
         return false;
     }
+
     validateReview = review => {
         // eslint-disable-next-line to the line before.
         const regex = new RegExp(/^[a-zA-Z ]{3,100}$/);
@@ -93,9 +107,11 @@ export default class BusinessItem extends Component{
             return false;
         }
     }
+
     handleChangeReview = event => {
         this.setState({reviewValue: event.target.value});
     }
+
     render = () => {
         let validReview = <div className="feedback valid-feedback">Looks good</div>
         let invalidReview = <div className="feedback invalid-feedback">{this.state.reviewMessage}</div>
@@ -117,6 +133,7 @@ export default class BusinessItem extends Component{
             />
         }
 
+        // Append a post review form on button click
         let postForm;
         postForm = this.state.formMounted
         ?<div className="form-group">

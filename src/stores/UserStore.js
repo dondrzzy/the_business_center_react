@@ -5,7 +5,6 @@ export class UserStore extends EventEmitter{
     constructor(){
         super();
         this.token = window.localStorage.getItem('jwt');
-        console.log(this.token)
         const tokenExists = this.token ? true: false;
         this.auth = {
             isAuthenticated : tokenExists,
@@ -17,6 +16,7 @@ export class UserStore extends EventEmitter{
         this.pendingMessage = false;
         this.pendingStatus = 'error';
     }
+    // return the decoded id of a token
     getDecodedId = () => {
         try {
             let decoded = jwtDecode(window.localStorage.getItem('jwt'));
@@ -26,21 +26,21 @@ export class UserStore extends EventEmitter{
         }
         
     }
+
+    // reset the currently details of the authenticated user
     resetAuth = () => {
         this.token = null;
         this.resetEmail = "";
         this.isRegistered = false;
     }
 
+    // return user if token exists
+    // To Do, check if token is not expired
     isLoggedIn = () => {
-        console.log('---', this.auth.isAuthenticated)
         return this.auth.isAuthenticated;
     }
 
-    getJwt = () => {
-        return JSON.parse(window.localStorage.getItem('jwt'));
-    }
-
+    // store the token in local storage
     loginUser = res => {
         if(res.success){
             this.auth.isAuthenticated = true;
@@ -52,6 +52,7 @@ export class UserStore extends EventEmitter{
         }
     }
 
+    // clear storage
     logout = res => {
         this.auth.isAuthenticated = false;
         this.message = res.message;
@@ -59,10 +60,12 @@ export class UserStore extends EventEmitter{
         this.emit('change');
     }
 
+    // return stored response from the server
     getResponse = () => {
         return this.message;
     }
 
+    // get message to toast when user is redirected to login
     getPendingReport = () => {
         if(this.pendingMessage){
             this.pendingMessage = false;
@@ -82,9 +85,14 @@ export class UserStore extends EventEmitter{
         }
     }
 
+    // get the email of a user trying to reset and clear it immediately
     getResetUser = () => {
-        return this.resetEmail;
+        let email = this.resetEmail;
+        this.resetEmail = "";
+        return email;
     }
+
+    // handle response, user entered email in forgot password form
     forgotPassword = res => {
         if(res.success){
             this.message = res.message;
@@ -94,6 +102,8 @@ export class UserStore extends EventEmitter{
             this.emit('error');
         }
     }
+
+    // emit show event if user reset token was successfully decoded else emit error or redirect
     showResetPassword = res => {
         console.log(res)
         if(res.success){
@@ -107,6 +117,7 @@ export class UserStore extends EventEmitter{
         }
     }
 
+    // emit success on password reset success
     resetPassword = res => {
         if(res.success){
             this.message = res.message;

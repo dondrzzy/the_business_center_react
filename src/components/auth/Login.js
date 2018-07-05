@@ -5,6 +5,7 @@ import UserStore from '../../stores/UserStore';
 import * as UserActions from '../../actions/UserActions';
 import { ToastContainer, toast } from 'react-toastify';
 import { css } from 'glamor';
+import Gifs from '../../utils/gitImage';
 
 class Login extends Component{
     static propTypes = {
@@ -29,6 +30,7 @@ class Login extends Component{
         }
     }
 
+    // life cycle methods
     componentWillMount = () => {
         UserStore.on('change', this.loginUser);
         UserStore.on('error', this.showLoginErrors);
@@ -52,14 +54,15 @@ class Login extends Component{
         UserStore.removeListener("error", this.showLoginErrors);
     }
 
+    // redirect a user top the dashboard or previous page
     loginUser = () => {
-        console.log('****')
         this.setState({
             loaderStyle:{display:"none"},
-            // redirectToReferrer : UserStore.isLoggedIn()
+            redirectToReferrer : UserStore.isLoggedIn()
         });
     }
 
+    // toast errors from the API to a user trying to log in
     showLoginErrors = () => {
         toast.error(UserStore.getResponse(), {
             position: toast.POSITION.TOP_RIGHT,
@@ -91,6 +94,7 @@ class Login extends Component{
         }
         return false;
     }
+
     validateEmail = email => {
         // eslint-disable-next-line to the line before.
         const regExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
@@ -100,6 +104,7 @@ class Login extends Component{
             return false;
         }
     }
+    // validate email and required field
     handleEmailValidation = email => {
         if(!email.trim()){
             this.setState({
@@ -202,14 +207,7 @@ class Login extends Component{
                             <img
                                 style={this.state.loaderStyle}
                                 // eslint-disable-next-line to the line before.
-                                src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWph
-                                eGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAA
-                                AEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBo
-                                VjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DY
-                                lJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAA
-                                ACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFV
-                                dmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYR
-                                gHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                src={Gifs.getImageLoader()} />
                         </div>
                             <input type="submit" value="Login" disabled={disabled} className="btn btn-block btn-primary" />
                             <Link to="/forgot_password" className="btn btn-default">Forgot Password*?</Link>

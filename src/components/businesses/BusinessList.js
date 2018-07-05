@@ -5,13 +5,15 @@ export default class BusinessList extends Component{
     constructor(props){
         super(props);
     }
-    
+    // create a list of business items
+    // takes in an array of businesses in props
     render(){
 
         let businessItems;
         let bgLight = true;
         if(this.props.businesses)
             businessItems =  this.props.businesses.map(business => {
+                // toggle between backgrounds
                 let bg = bgLight;
                 bgLight = !bgLight;
                 return (
@@ -23,7 +25,6 @@ export default class BusinessList extends Component{
                     viewOptions={this.props.viewOptionsButtons} />
                 )
             })
-            console.log(this.props.businesses);
 
         return(
             <ul className="u-bs">

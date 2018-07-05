@@ -143,6 +143,7 @@ export default class Businesses extends Component{
         return true;
     }
     render = () => {
+        // create the pagination buttons depending on the response from the server
         let {prev_page} = this.state.businessWrap;
         let {next_page} = this.state.businessWrap;
         
@@ -154,13 +155,15 @@ export default class Businesses extends Component{
         ? <li className="page-item"><a className="page-link" id="next-link" onClick={ () => this.handleSetPage(next_page)} href="#">Next</a></li>
         : <li className="page-item disabled"><span className="page-link off">Next</span></li>
         let curr = next_page ? next_page-1:prev_page+1;
-        console.log(prev_page)
 
+        // create the category option elements for the select element
         let categoryOptions;
         if(this.state.businessWrap.categories)
             categoryOptions = this.state.businessWrap.categories.map(option => {
                 return(<option key={option.id} value={option.id}>{option.category}</option>)
             });
+
+        // pass the required props to the business list component
         let businessList = <BusinessList
             categoryOptions={categoryOptions}
             businesses={this.state.businessWrap.businesses}

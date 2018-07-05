@@ -22,6 +22,7 @@ export default class DeleteBusiness extends Component{
         this.setState({ open: false });
     }
 
+    // use swal elements to prompt the user on deleting a business
     mountAlertComponent = () => {
         const deleteComponent = () => {
             return swal({
@@ -51,10 +52,6 @@ export default class DeleteBusiness extends Component{
             )
         };
         this.setState({ deleteAlert: deleteComponent()})
-    }
-
-    unmountAlertComponent(){
-
     }
 
     render(){

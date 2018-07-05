@@ -36,6 +36,7 @@ export default class BusinessRegister extends Component{
         BusinessStore.removeListener('failure', this.stopLoader);
     }
 
+    // clear the modal on successfully registering a business
     clearModal = () => {
         this.setState({
             loaderStyle:{display:"none"},
@@ -50,6 +51,7 @@ export default class BusinessRegister extends Component{
         });
     }
 
+    //  remove the loading gif from the register page
     stopLoader = () => {
         this.setState({
             loaderStyle:{display:"none"},
@@ -152,6 +154,7 @@ export default class BusinessRegister extends Component{
         }
     }
 
+    // validate form details on form submit and call business action to register if valid
     handleBusinessRegister = event => {
         console.log('submitted');
         let nameRes = this.handleNameValidation(this.state.name);
@@ -193,6 +196,7 @@ export default class BusinessRegister extends Component{
     }
 
     render = () => {
+        // generate feedback fields and classes for the register form
         let validField = <div className="feedback valid-feedback">Looks good</div>
         let validName = validField
         let invalidName = <div className="feedback invalid-feedback">{this.state.nameMessage}</div>

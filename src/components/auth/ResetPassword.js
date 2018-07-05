@@ -5,6 +5,7 @@ import * as UserActions from '../../actions/UserActions';
 import { ToastContainer, toast } from 'react-toastify';
 import { css } from 'glamor';
 import { BusinessStore } from '../../stores/BusinessStore';
+import Gifs from '../../utils/gitImage';
 
 export default class ResetPassword extends Component{
 
@@ -37,6 +38,7 @@ export default class ResetPassword extends Component{
         UserStore.on('error', this.showFormErrors);
         UserStore.on('redirect', this.redirectUser);
     }
+
     componentWillUnmount = () => {
         UserStore.removeListener('error', this.showFormErrors);
         UserStore.removeListener('success', this.resetPassword);
@@ -48,6 +50,7 @@ export default class ResetPassword extends Component{
         UserActions.verifyToken(this.props.match.params.token)
     }
 
+    // display the reset password view on successfully decoding the reset password token
     showResetPassword = () => {
         let email = UserStore.getResetUser();
         this.setState({
@@ -59,13 +62,14 @@ export default class ResetPassword extends Component{
         });
     }
 
+    // redirect the user to login incase the reset token is invalid
     redirectUser = () => {
-        console.log('redirecting')
         this.setState({
             rediectToForgot:true
         });
     }
 
+    // show success message on successfully reseting the password
     resetPassword = () => {
         this.setState({
             loaderStyle:{display:"none"},
@@ -75,6 +79,7 @@ export default class ResetPassword extends Component{
         });
     }
 
+    // display form errors from the server
     showFormErrors = () => {
         this.setState({
             loaderStyle:{display:"none"},
@@ -181,14 +186,7 @@ export default class ResetPassword extends Component{
                         <img
                         id="img-loader"
                         // eslint-disable-next-line to the line before.
-                        src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWph
-                        eGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAA
-                        AEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBo
-                        VjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DY
-                        lJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAA
-                        ACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFV
-                        dmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYR
-                        gHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                        src={Gifs.getImageLoader()} />
                     </div>
                 </div>
             )
@@ -236,14 +234,7 @@ export default class ResetPassword extends Component{
                                 <img
                                     style={this.state.loaderStyle}
                                     // eslint-disable-next-line to the line before.
-                                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWph
-                                    eGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAA
-                                    AEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBo
-                                    VjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DY
-                                    lJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAA
-                                    ACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFV
-                                    dmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYR
-                                    gHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                    src={Gifs.getImageLoader()} />
                             </div>
                             <input type="submit" value="Submit" disabled={disabled} className="btn btn-block btn-primary" />
                             <Link to="/" className="btn btn-default">Cancel</Link>

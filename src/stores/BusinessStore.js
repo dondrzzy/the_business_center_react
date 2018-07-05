@@ -13,14 +13,17 @@ export class BusinessStore extends EventEmitter{
         this.deletedBusinessId = ""
     }
 
+    // return the message stored from the API
     getResponse = () => {
         return this.message;
     }
 
+    // return the business wrap object
     getBusinesses = () => {
         return this.businessWrap;
     }
 
+    // add business in response from API to the store
     loadBusinesses = res => {
         console.log('res', res);
         if(res.success){
@@ -36,6 +39,7 @@ export class BusinessStore extends EventEmitter{
         }
     }
 
+    // handle response from a register business action
     registerBusinesses = res => {
         if(res.success){
             this.message = res.message;
@@ -51,6 +55,7 @@ export class BusinessStore extends EventEmitter{
         }
     }
 
+    // handle response from an update business action
     updateBusinesses = data => {
         if(data.res.success){
             this.message = data.res.message;
@@ -66,6 +71,8 @@ export class BusinessStore extends EventEmitter{
             }
         }
     }
+
+    // handle delete business response from the server
     deleteBusinesses = data => {
         if(data.res.success){
             this.message = data.res.message;
@@ -81,11 +88,13 @@ export class BusinessStore extends EventEmitter{
             }
         }
     }
+
     getUpdatedBusiness = () => {
         let business = this.updatedBusinesses;
         // this.updatedBusinesses = {};
         return business
     }
+
     getDeletedBusiness = () => {
         return this.deletedBusinessId;
     }
@@ -107,10 +116,12 @@ export class BusinessStore extends EventEmitter{
         }
     }
 
+    // takes in id and returns the reviews of that business
     getReviews = id => {
         return this.reviews[id];
     }
 
+    // get the id of the business that just had an action perfomed
     getCurrentId = id => {
         if(id == this.currentBusinessId){
             this.currentBusinessId = null;
@@ -119,6 +130,7 @@ export class BusinessStore extends EventEmitter{
         return false;
     }
 
+    // add response reviews to the store reviews object
     loadReviews = data => {
         if(data.res.success){
             this.reviews[data.id] = data.res.reviews;
@@ -127,6 +139,7 @@ export class BusinessStore extends EventEmitter{
         }
     }
 
+    // confirm if the id of a business is equal to the business id currently stored in the store
     isReviewedBusiness = id => {
         if(id == this.reviewedBusinessId){
             this.reviewedBusinessId = null;
