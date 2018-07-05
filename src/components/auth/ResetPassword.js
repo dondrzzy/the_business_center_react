@@ -67,6 +67,7 @@ export default class ResetPassword extends Component{
         this.setState({
             rediectToForgot:true
         });
+        console.log('chsnged state')
     }
 
     // show success message on successfully reseting the password
@@ -174,6 +175,7 @@ export default class ResetPassword extends Component{
     }
     
     render(){
+        console.log('--', this.state.rediectToForgot)
         if(this.state.rediectToForgot){
             return(
                 <Redirect to='/forgot_password' />
@@ -205,6 +207,7 @@ export default class ResetPassword extends Component{
         }
 
         return(
+            <div className="container" id="main">
             <div className="row justify-content-center">
                 <div className="col-md-6">
                     <h3 className="text-center">Reset Password</h3>
@@ -241,6 +244,7 @@ export default class ResetPassword extends Component{
                         </div>                     
                     </form>
                 </div>
+            </div>
             </div>
         );
     }

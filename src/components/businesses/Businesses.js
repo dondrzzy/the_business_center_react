@@ -6,8 +6,8 @@ import BusinessStore from '../../stores/BusinessStore';
 import * as BusinessActions from '../../actions/BusinessActions';
 
 export default class Businesses extends Component{
-    constructor(props){
-        super(props);
+    constructor(){
+        super();
         this.state = {
             decodedId: '',
             businessWrap : {
@@ -172,6 +172,7 @@ export default class Businesses extends Component{
         />
 
         return(
+            <div className="container" id="main">
             <div ref="businesses" className="businesses">
                 <div className="row">
                     <ToastContainer />
@@ -187,7 +188,6 @@ export default class Businesses extends Component{
                                             value={this.state.params.q}
                                             onChange={this.handleChangeSearch}
                                             className="form-control"
-                                            ref="q"
                                             placeholder="Search By Name"
                                         />
                                     </div>
@@ -198,20 +198,15 @@ export default class Businesses extends Component{
                                             onChange={this.handleChangeCategory}
                                             name="category"
                                             id="category"
-                                            ref="category"
                                             placeholder="Category"
                                             className="form-control">
                                             <option value="">Select category</option>
                                             {categoryOptions}
-                                            <option
-                                                value={this.state.businessWrap.categories.length+1}>
-                                                Other
-                                            </option>
                                         </select>
                                     </div>
                                     <div className="form-group col-md-3 mb-2">
                                         <label htmlFor="location" className="sr-only">Location</label>
-                                        <input type="text" name="location" value={this.state.params.location} onChange={this.handleChangeLocation} className="form-control" ref="location" placeholder="Location" />
+                                        <input type="text" name="location" value={this.state.params.location} onChange={this.handleChangeLocation} className="form-control" placeholder="Location" />
                                     </div>
                                     <div className="form-group col-md-3 mb-2">
                                         <button type="submit" className="btn btn-primary btn-block">Submit</button>
@@ -235,7 +230,7 @@ export default class Businesses extends Component{
                             <ul className="pagination justify-content-end">
                                 <li className="page-item disabled"><span className="page-link">Per page:</span></li>
                                 <li className="page-item">
-                                    <select value={this.state.params.limit} name="limit" ref="limit" id="limit" onChange={this.handleLimitChange}>
+                                    <select value={this.state.params.limit} name="limit" id="limit" onChange={this.handleLimitChange}>
                                         <option value="5">5</option>
                                         <option value="10">10</option>
                                         <option value="15">15</option>
@@ -249,6 +244,7 @@ export default class Businesses extends Component{
                         {businessList}
                     </div>
                 </div>
+            </div>
             </div>
         )
     }

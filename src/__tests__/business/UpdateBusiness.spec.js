@@ -56,7 +56,8 @@ describe(<UpdateBusiness />, () => {
     });
 
     it('should submit a valid form', async () => {
-        const spy = jest.spyOn(wrapper.instance(), 'showUpdate');
+        const spy = jest.spyOn(BusinessActions, 'updateBusiness');
+        wrapper.instance().forceUpdate()
         axios.put.mockImplementation(
             jest.fn(()=> Promise.resolve({
             data:{
@@ -85,8 +86,4 @@ describe(<UpdateBusiness />, () => {
         await wrapper.find("button[type='submit']").simulate('click');
         expect(spy).toHaveBeenCalled();
     });
-
-
-  
-
 })

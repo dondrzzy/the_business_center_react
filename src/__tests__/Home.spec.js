@@ -14,10 +14,7 @@ describe(<Home />, () => {
         )
         component = wrapper.find(Home).dive()
     })
-    it('Should contain login button', () => {
-        expect(component.find("#loginBtn").length).toEqual(1)
-    })
-    it('Should contain login button', () => {
+    it('Should contain register button', () => {
         expect(component.find("#registerBtn").length).toEqual(1)
     });
 });

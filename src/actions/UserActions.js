@@ -142,6 +142,7 @@ export const verifyToken = token =>{
             }
         })
     .then(function (response) {
+        console.log('rejecting')
         dispatcher.dispatch({
             type:"SHOW_RESET_PASSWORD",
             data:response.data
@@ -155,14 +156,3 @@ export const verifyToken = token =>{
         }
     });
 }
-// export const getBusinesses = () =>{     
-//     axios.get("/businesses")
-//         .then(res => {
-//             console.log('fetched', res.data);
-//             dispatcher.dispatch({
-//                 type:"LOAD_BUSINESSES",
-//                 data:res.data
-//             })
-//         })
-         
-// }

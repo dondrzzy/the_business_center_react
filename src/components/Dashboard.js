@@ -41,32 +41,33 @@ export default class Dashboard extends Component{
         })
         BusinessStore.on('change', this.loadUserBusinesses);
         BusinessStore.on('success', this.reloadBusinesses);
-        BusinessStore.on('redirect', ()=> {
-            console.log('redirecting');
-            $('.modal').hide();
-            $('.modal-backdrop').remove();
-            localStorage.setItem('toastMessage', JSON.stringify(BusinessStore.getResponse()));
-            this.setState({redirect:true})
-        });
-        BusinessStore.on('failure', () => this.toastErrors());
+        BusinessStore.on('redirect', this.redirectUser);
+        BusinessStore.on('failure', this.toastErrors);
         BusinessStore.on('review_posted', this.toastSuccess);
         BusinessStore.on('update', this.updateBusinesses);
         BusinessStore.on('delete', this.removeBusinesses);
     }
 
     componentWillUnmount = () => {
-        BusinessStore.removeListener('change', ()=>{});
-        BusinessStore.removeListener('success', ()=>{});
-        BusinessStore.removeListener('redirect', ()=>{});
-        BusinessStore.removeListener('review_posted', ()=>{});
-        BusinessStore.removeListener('failure', ()=>{});
-        BusinessStore.removeListener('update', ()=>{});
-        BusinessStore.removeListener('delete', ()=>{});
+        BusinessStore.removeListener('change', this.loadUserBusinesses);
+        BusinessStore.removeListener('success', this.reloadBusinesses);
+        BusinessStore.removeListener('redirect', this.redirectUser);
+        BusinessStore.removeListener('review_posted', this.toastSuccess);
+        BusinessStore.removeListener('failure', this.toastErrors);
+        BusinessStore.removeListener('update', this.updateBusinesses);
+        BusinessStore.removeListener('delete', this.removeBusinesses);
     }
 
     componentDidMount = () => {
         this.setState({fetching: true})
         BusinessActions.getUserBusinesses();
+    }
+
+    redirectUser = () => {
+        $('.modal').hide();
+        $('.modal-backdrop').remove();
+        localStorage.setItem('toastMessage', JSON.stringify(BusinessStore.getResponse()));
+        this.setState({redirect:true})
     }
 
     toastErrors = () => {
@@ -149,7 +150,6 @@ export default class Dashboard extends Component{
                 urlParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(params[i]));
         }
         if(this.refs.dashboard){
-            console.log('enconding')
             BusinessActions.getUserBusinesses("?" + urlParams.join('&'));
         }
     }
@@ -233,6 +233,7 @@ export default class Dashboard extends Component{
         }
 
         return(
+            <div className="container" id="main">
             <div ref="dashboard" id="dashboard">
                 <div className="row">
                     <ToastContainer />
@@ -273,7 +274,7 @@ export default class Dashboard extends Component{
                             <ul className="pagination justify-content-end">
                                 <li className="page-item disabled"><span className="page-link">Per page:</span></li>
                                 <li className="page-item">
-                                    <select value={this.state.params.limit} ref="limit" id="limit" onChange={this.handleLimitChange}>
+                                    <select value={this.state.params.limit} id="limit" onChange={this.handleLimitChange}>
                                         <option value="5">5</option>
                                         <option value="10">10</option>
                                         <option value="15">15</option>
@@ -288,6 +289,7 @@ export default class Dashboard extends Component{
                     </div>
                 </div>
                 <BusinessRegister categoryOptions={categoryOptions} />
+            </div>
             </div>
         )
     }

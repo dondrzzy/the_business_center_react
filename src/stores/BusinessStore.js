@@ -25,13 +25,11 @@ export class BusinessStore extends EventEmitter{
 
     // add business in response from API to the store
     loadBusinesses = res => {
-        console.log('res', res);
         if(res.success){
             this.businessWrap = res;
             this.emit('change');
         }else{
             if(res.token === false){
-                console.log('emmiting redirect')
                 this.emit('redirect');
             }else{
                 this.emit('failure');

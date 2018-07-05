@@ -110,6 +110,7 @@ export class UserStore extends EventEmitter{
             this.resetEmail = res.user;
             this.emit('show');
         }else{
+            console.log('******')
             this.message = res.message;
             this.pendingMessage = true;
             this.pendingStatus = 'error';

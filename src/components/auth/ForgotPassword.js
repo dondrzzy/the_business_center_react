@@ -120,6 +120,7 @@ export default class ForgotPassword extends Component{
         let disabled = this.state.processing ? true : false;
 
         return(
+            <div className="container" id="main">
             <div className="row justify-content-center">
                 <ToastContainer />
                 <div className="col-md-6">
@@ -152,6 +153,7 @@ export default class ForgotPassword extends Component{
                         </div>                     
                     </form>
                 </div>
+            </div>
             </div>
         );
     }

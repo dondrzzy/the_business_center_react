@@ -170,3 +170,45 @@ ul.reviews{
 p.badge{
   margin-bottom: 0!important;
 }
+.business-name{
+  color: #337ab7;
+}
+.carousel img{
+  width: 100%;
+}
+.carousel .jumbotron{
+  background: #31303024;
+}
+.carousel p.description{
+  font-size: 16px;
+}
+/* parallas */
+.parallax{
+  height: 700px;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  
+}
+
+.parallax-inner{
+  background: #0000007a;
+  height: 100%;
+  color: white;
+}
+.parallax-inner .jumbotron{
+  background: transparent;
+}
+.parallax-inner h1{
+ font-size: 4.1875rem;
+ text-transform: uppercase;
+}
+.parallax-inner .intro-body{
+  font-size: 16px;
+  margin-top:50px;
+}
+.clear{
+  background: transparent !important;
+}

@@ -53,13 +53,13 @@ export default class UpdateBusiness extends Component{
     }
 
     componentWillMount = () => {
-        BusinessStore.on('failure', () => this.showErrors() )
-        BusinessStore.on('update', () => this.showUpdate() )
+        BusinessStore.on('failure', this.showErrors);
+        BusinessStore.on('update', this.showUpdate);
     }
 
     componentWillUnmount = () => {
-        BusinessStore.removeListener('failure', () => {})
-        BusinessStore.removeListener('update', () => {})
+        BusinessStore.removeListener('failure', this.showErrors);
+        BusinessStore.removeListener('update', this.showUpdate);
     }
     
     handleNameChange = event => {

@@ -98,7 +98,6 @@ export const updateBusiness = (data, id) => {
         }
     )
     .then(response =>{
-        console.log(response)
         dispatcher.dispatch({
             type:"UPDATE_BUSINESSES",
             data:{

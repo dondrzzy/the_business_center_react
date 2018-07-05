@@ -29,8 +29,10 @@ class Logout extends Component{
         if(this.state.redirectToLogin === true)
             return <Redirect to="/login" />
         return(
+            <div className="container" id="main">
             <div className="signout">
                 <h3>Logging out ...</h3>
+            </div>
             </div>
             
         )

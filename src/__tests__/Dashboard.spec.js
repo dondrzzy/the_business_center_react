@@ -69,7 +69,6 @@ describe(<Dashboard />, () => {
       expect(component.state().params.page).toEqual(1);
       component.find('#next').simulate('click');
       expect(component.state().params.page).toEqual(3);
-      console.log(component.instance())
     });
 
     it("should paginate prev", () => {

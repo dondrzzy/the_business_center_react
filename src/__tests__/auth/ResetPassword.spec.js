@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import * as UserActions from '../../actions/UserActions';
 import UserStore from '../../stores/UserStore';
 import axios from 'axios';
+import { wrap } from 'module';
 
 describe('<ResetPassword />', () => {
   let wrapper,
@@ -65,7 +66,6 @@ describe('<ResetPassword />', () => {
       resetUserEmail: 'abc@gmail.com',
       alertMessage: "Account email: a@gmail.com"
     })
-    console.log(component.state())
     let form = component.find('form');
     form.find("input[name='password']").simulate('change', {target: {value: ""}});
     form.find("input[name='confirmPassword']").simulate('change', {target: {value: ""}});
@@ -104,4 +104,18 @@ describe('<ResetPassword />', () => {
     await form.simulate('submit', {preventDefault: () => {}});
     expect(component.state().isReset).toBeTruthy();
   });
+
+  it('should redirect user on passing invalid token', async () => {
+    axios.post.mockImplementationOnce(
+      jest.fn(()=> Promise.resolve({
+        data:{
+          success:false,
+          message:'Invalid token'
+          }
+      }))
+    )
+    let wrappedComponent = await shallow(<ResetPassword location={location} match={match}/>);
+    let spy = jest.spyOn(wrappedComponent.instance(), 'redirectUser');
+    expect(wrappedComponent.state().rediectToForgot).toBeTruthy();
+  })
 });

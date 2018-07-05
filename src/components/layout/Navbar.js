@@ -8,7 +8,6 @@ export default class Navbar extends Component{
         this.state = {
             isAuthenticated:UserStore.isLoggedIn()
         }
-        this.changeLoginState = this.changeLoginState.bind(this);
     }
     componentWillMount = () => {
         UserStore.on('change', this.changeLoginState);
@@ -42,7 +41,7 @@ export default class Navbar extends Component{
         return (
             <div className="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
                 <div className="container">
-                    <Link to="/" className="navbar-brand">React Flux App</Link>
+                    <Link to="/" className="navbar-brand">The Business Center</Link>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>

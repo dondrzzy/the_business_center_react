@@ -5,12 +5,10 @@ configure({ adapter: new Adapter() });
 class LocalStorageMock {
     constructor() {
         this.store = {
-            // 'jwt': '1'
         };
     }
 
     getItem(key) {
-        console.log(key)
         return this.store[key] || null;
     }
 

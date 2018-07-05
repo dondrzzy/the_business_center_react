@@ -29,7 +29,6 @@ export default class Register extends Component{
             validConfirmPassword : false,
             confirmPasswordMessage : "This field is required"
         }
-        console.log(this.props)
     }
 
     componentWillMount = () => {//eventemitters to look out for when component mounts
@@ -224,13 +223,14 @@ export default class Register extends Component{
         let invalidConfirmPassword = <div className="feedback invalid-feedback">{this.state.confirmPasswordMessage}</div>
         let confirmPasswordFeedback = this.state.validConfirmPassword ? validConfirmPassword : invalidConfirmPassword;
 
-        if(this.state.isRegistered || UserStore.isLoggedIn === true){
+        if(this.state.isRegistered || UserStore.isLoggedIn() === true){
             return(
                 <Redirect to='/login' />
             )
         }
 
         return(
+            <div className="container" id="main">
             <div className="row justify-content-center">
                 <div className="col-md-6 SignUp">
                     <ToastContainer />
@@ -279,6 +279,7 @@ export default class Register extends Component{
                         </div>                     
                     </form>
                 </div>
+            </div>
             </div>
         );
     }

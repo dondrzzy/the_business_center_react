@@ -66,7 +66,6 @@ describe(<Businesses />, () => {
         categories: []
       }
     });
-    console.log(wrapper.state());
     wrapper.find("#prev-link").simulate('click');
     expect(wrapper.state().params.page).toEqual(2);
 

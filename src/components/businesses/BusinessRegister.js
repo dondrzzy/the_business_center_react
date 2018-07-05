@@ -156,7 +156,6 @@ export default class BusinessRegister extends Component{
 
     // validate form details on form submit and call business action to register if valid
     handleBusinessRegister = event => {
-        console.log('submitted');
         let nameRes = this.handleNameValidation(this.state.name);
         let categoryRes = this.handleCategoryValidation(this.state.category);
         let locationRes = this.handleLocationValidation(this.state.location);
@@ -174,7 +173,17 @@ export default class BusinessRegister extends Component{
     }
 
     handleModalClosed = () => {
-        this.setState({loaderStyle : {display:"none"}});
+        this.setState({
+            loaderStyle : {display:"none"},
+            name: "",
+            location: "",
+            category: "",
+            formValidated: "",
+            nameClass : "form-control",
+            categoryClass : "form-control",
+            locationClass : "form-control"
+
+        });
     }
 
     handleNameChange = event => {

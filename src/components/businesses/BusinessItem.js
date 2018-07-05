@@ -14,8 +14,8 @@ export default class BusinessItem extends Component{
     constructor(props){
         super(props);
         this.state = {
-            reviewValue : '',
-            reviewMessage:"This field is required",
+            reviewValue : "",
+            reviewMessage: "This field is required",
             reviewClassName : "form-control",
             formMounted : false,
             login_required:false,
@@ -46,7 +46,12 @@ export default class BusinessItem extends Component{
 
     // hide form on cancel event
     hidePostForm = () => {
-        this.setState({formMounted:false});
+        this.setState({
+            formMounted: false,
+            reviewClassName: "form-control",
+            reviewMessage: "This field is required",
+            reviewValue: ""
+        });
     }
 
     // fetch business reviews on mounting the business
@@ -60,8 +65,12 @@ export default class BusinessItem extends Component{
     updateBusinessReviews = () => {
         if(BusinessStore.isReviewedBusiness(this.props.business.id)){
             BusinessActions.getReviews(this.props.business.id); 
-            this.setState({formMounted : false,})
-            console.log('---', this.state)
+            this.setState({
+                formMounted: false,
+                reviewClassName: "form-control",
+                reviewMessage: "This field is required",
+                reviewValue: ""
+            });
         }        
     }
 
@@ -100,7 +109,7 @@ export default class BusinessItem extends Component{
 
     validateReview = review => {
         // eslint-disable-next-line to the line before.
-        const regex = new RegExp(/^[a-zA-Z ]{3,100}$/);
+        const regex = new RegExp(/^[a-zA-Z0-9,?'"!@#*();: ]{3,100}$/);
         if (regex.test(review)) {
             return true;
         }else {
@@ -150,7 +159,7 @@ export default class BusinessItem extends Component{
             <div>
                 <li className="u-b">
                     <div className={jumboClass}>
-                        <h4> <Link to={link}>{this.props.business.name}</Link> | <span>{this.props.business.category.category}</span> 
+                        <h4><span className="business-name">{this.props.business.name}</span> | <span>{this.props.business.category.category}</span> 
                         { this.state.isLoggedIn === true &&
                             this.props.uid === this.props.business.user.id &&
                             this.props.viewOptions() &&
@@ -169,7 +178,9 @@ export default class BusinessItem extends Component{
                         }
                         </h4>
                         
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod eaque aspernatur fugiat dolorum harum, similique sint sunt impedit, itaque voluptatum eos eius ipsa tempora nisi delectus distinctio voluptates? Harum, tenetur.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod eaque aspernatur fugiat
+                            dolorum harum, similique sint sunt impedit, itaque voluptatum eos eius ipsa 
+                            tempora nisi delectus distinctio voluptates? Harum, tenetur.</p>
                         <button data-toggle="collapse" className="review-btn btn btn btn-primary btn-sm" data-target={dataTarget} type="button"aria-expanded="false" aria-controls="reviews1">
                             Reviews <i className="fas fa-comment"></i>
                         </button>

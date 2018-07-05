@@ -173,6 +173,7 @@ class Login extends Component{
 
 
         return(
+            <div className="container" id="main">
             <div className="row justify-content-center">
                 <div className="col-md-6 SignIn">
                     <ToastContainer />
@@ -214,6 +215,7 @@ class Login extends Component{
                         </div>                     
                     </form>
                 </div>
+            </div>
             </div>
         );
     }
