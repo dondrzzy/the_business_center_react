@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/dondrzzy/the_business_center_react.svg?branch=ft-travis-coverage)](https://travis-ci.org/dondrzzy/the_business_center_react)
-[![Coverage Status](https://coveralls.io/repos/github/dondrzzy/the_business_center_react/badge.svg?branch=ft-travis-coverage)](https://coveralls.io/github/dondrzzy/the_business_center_react?branch=ft-travis-coverage)
+[![Build Status](https://travis-ci.org/dondrzzy/the_business_center_react.svg?branch=master)](https://travis-ci.org/dondrzzy/the_business_center_react)
+[![Coverage Status](https://coveralls.io/repos/github/dondrzzy/the_business_center_react/badge.svg?branch=master)](https://coveralls.io/github/dondrzzy/the_business_center_react?branch=master)
 
 
 # The Business Center
