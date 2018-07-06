@@ -32,34 +32,47 @@ The application consumes an API hosted [here](https://the-business-center-api.he
 
 ##### Run the following commands to have a working version of the application locally
 
-> Navigate to the folder where you want to install the application
+Navigate to the folder where you want to install the application
 
-Run `git clone https://github.com/dondrzzy/the_business_center_react.git`
-> cd into the application folder
+> Run `git clone https://github.com/dondrzzy/the_business_center_react.git`
 
-Run `cd <application folder>`
+cd into the application folder
 
-> Install the application dependencies
+> Run `cd <application folder>`
 
-Run `npm install`
+Install the application dependencies
 
-> Start the application
+> Run `npm install`
+
+Change the **`baseUrl`** to your backend API in **`src/utils/baseUrl.js`**
+
+Forexample
+
+`
+      getBaseUrl = () {
+          return 'http://127.0.0.1:5000/api/v1/';
+      }
+`
+
+## Start the application
 
 Run `npm run start`
+
+Go to `http://localhost:3000/`
 
 
 ##### Running tests and coverage
 
-> Testing the application
+Testing the application
 
-Run `npm run test`
+> Run `npm run test`
 
-> Testing coverage
+Testing coverage
 
-Run `npm run coverage`
+> Run `npm run coverage`
 
 
-# Author: Sibo Donald
+### Author: Sibo Donald
 
 > For more enquiries: Email me at sibo.donald16@gmail.com
 
