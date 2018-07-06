@@ -60,9 +60,6 @@ export default class Businesses extends Component{
             position: toast.POSITION.TOP_RIGHT
         });
     }
-    logoutUser = () => {
-        localStorage.setItem('toastMessage', JSON.stringify(BusinessStore.getResponse()));
-    }
     setParams = params => {
         if(this.refs.businesses) this.setState({ params });
     }

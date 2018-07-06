@@ -44,6 +44,7 @@ describe(<Businesses />, () => {
     const spy = jest.spyOn(BusinessActions, 'getBusinesses');
     wrapper.find("input[name='q']").simulate('change', {target :{value: 'andela'}});
     wrapper.find("input[name='location']").simulate('change', {target :{value: 'andela'}});
+    wrapper.find("select[name='category']").simulate('change', {target :{value: ''}});
     wrapper.find("select[name='category']").simulate('change', {target :{value: '1'}});
     wrapper.find('form').simulate('submit');
     expect(spy).toHaveBeenCalled();
@@ -72,6 +73,7 @@ describe(<Businesses />, () => {
 
 describe('should toast state message when a business delete action fails', () => {
   beforeEach(() => {
+    window.localStorage.setItem('jwt', JSON.stringify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImV4cCI6MTUzMTMzMTEwN30.ONQTRwKWaMS-RD618plLzW5327VZcZ-xZ2iUzDiltqc"));
     axios.delete.mockImplementationOnce(
       jest.fn(()=> Promise.reject({
         response:{
@@ -86,9 +88,12 @@ describe('should toast state message when a business delete action fails', () =>
 
   it('', () => {
     let wrapper = shallow(<Businesses />);
+    wrapper.instance().viewOptionsButtons();
+    wrapper.instance().viewPostReviewButton();
     BusinessActions.deleteBusiness('1');
     setImmediate(() => {
       expect(wrapper.state().message).toBe('You can not perform that action');
+      window.localStorage.removeItem('jwt');
       wrapper.unmount();
     });
   })

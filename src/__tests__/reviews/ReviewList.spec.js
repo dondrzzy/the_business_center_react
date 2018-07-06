@@ -34,4 +34,12 @@ describe(<ReviewsList />, () => {
         );
         expect(wrapper.find(ReviewItem)).toHaveLength(1);
     });
+    it('should return a business items list', ()=>{
+        wrapper = shallow(
+            <ReviewsList 
+                postId={1}
+            />
+        );
+        expect(wrapper.find(ReviewItem)).toHaveLength(0);
+    });
 })

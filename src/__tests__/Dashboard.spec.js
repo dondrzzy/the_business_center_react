@@ -55,7 +55,18 @@ describe(<Dashboard />, () => {
     });
 
     it("should redirect unauthorized user to logout", () => {
-      component.setState({redirect: true});
+      component.setState({
+        redirect: true,
+        businessWrap: {
+          businesses:[],
+          next_page:'',
+          prev_page:'',
+          total: 0,
+          user: {},
+          categories: []
+        }
+      
+      });
       expect(component.find(Redirect)).toHaveLength(1);
     });
 
@@ -66,7 +77,12 @@ describe(<Dashboard />, () => {
     })
 
     it("should paginate next", () => {
+      component.setState({
+        name: ""
+      })
       expect(component.state().params.page).toEqual(1);
+      component.instance().viewOptionsButtons();
+      component.instance().viewPostReviewButton();
       component.find('#next').simulate('click');
       expect(component.state().params.page).toEqual(3);
     });
@@ -110,6 +126,7 @@ describe(<Dashboard />, () => {
         }))
       )
       component.find(Dashboard);
+      component.instance().handleSetPage();
       expect(component.state().redirect).toBeFalsy();
       await BusinessActions.getUserBusinesses('');
       expect(component.state().redirect).toBeTruthy();
@@ -205,6 +222,7 @@ describe('dashboard redirect', () => {
 
 describe('dashboard pre-loading businesses', () => {
   beforeEach(() => {
+    window.localStorage.setItem('jwt', JSON.stringify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImV4cCI6MTUzMTMzMTEwN30.ONQTRwKWaMS-RD618plLzW5327VZcZ-xZ2iUzDiltqc"));
       axios.get.mockImplementationOnce(
         jest.fn(()=> Promise.resolve({
           data:{
@@ -244,6 +262,7 @@ describe('dashboard pre-loading businesses', () => {
       component = wrapper.find(Dashboard).dive();
     })
     afterEach( () => {
+      window.localStorage.removeItem('jwt');
       wrapper.unmount();
     });
     it('should preload state with user businesses', async () => {

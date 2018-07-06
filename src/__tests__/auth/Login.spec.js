@@ -13,7 +13,7 @@ let wrapper, component;
 
 describe('Login component', () => {
 	beforeEach(() => {
-		axios.post.mockImplementationOnce(
+		axios.post.mockImplementation(
 			jest.fn(()=> Promise.reject({
 			response: {
 				data:{
@@ -40,9 +40,10 @@ describe('Login component', () => {
 			.simulate('change', {target: {value: '#xxx@2017'}})
 		component.find('form').simulate('submit', {preventDefault: () => {}});
 		setImmediate(() => {
-			expect(component.state().message).toBe('User not found');
+      expect(component.state().message).toBe('User not found');
+      component.instance().componentWillUnmount();
 		});
-	});
+  });
 });
 
 describe('<Login />', () => {
