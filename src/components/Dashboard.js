@@ -221,12 +221,14 @@ export default class Dashboard extends Component{
 
         if(this.state.fetching){
             return(
-                <div className="row">
-                    <div className="col">
-                        <img
-                        id="img-loader"
-                        // eslint-disable-next-line to the line before.
-                        src={Gifs.getImageLoader()} />
+                <div className="container" id="main">
+                    <div className="row">
+                        <div className="col">
+                            <img
+                            id="img-loader"
+                            // eslint-disable-next-line to the line before.
+                            src={Gifs.getImageLoader()} />
+                        </div>
                     </div>
                 </div>
             )
