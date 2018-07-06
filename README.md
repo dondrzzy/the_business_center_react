@@ -46,7 +46,7 @@ Install the application dependencies
 
 Change the **`baseUrl`** to your backend API in **`src/utils/baseUrl.js`**
 
-Forexample
+For example
 
 `
       getBaseUrl = () {
