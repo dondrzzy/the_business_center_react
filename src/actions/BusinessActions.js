@@ -1,52 +1,55 @@
 import dispatcher from "../dispatcher";
 import axios from "axios";
+import * as urlConfig from '../utils/baseUrl';
+const baseUrl = urlConfig.default.getBaseUrl();
 
 export const getBusinesses = (searchStr) =>{
-    axios({
-        method: 'get',
-        url: 'http://127.0.0.1:5000/api/v1/businesses'+searchStr,
+    axios.get( baseUrl +'businesses'+searchStr,
+    {
         headers: {
-            'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
         }
     })
-    .then(response=> 
+    .then(response => {
         dispatcher.dispatch({
             type:"LOAD_BUSINESSES",
             data:response.data
         })
-    )
-    .catch(function (error) {
-        console.log(error);
-        // dispatcher.dispatch({
-        //     type:"LOAD_BUSINESSES",
-        //     data: error.response.data
-        // });
+    })
+    .catch( error => {
+        if(error.response){
+            dispatcher.dispatch({
+                type:"LOAD_BUSINESSES",
+                data: error.response.data
+            });
+        }
     });
 }
 
-export const getUserBusinesses = () =>{
+export const getUserBusinesses = (searchStr='') =>{
     const token = localStorage.getItem('jwt') 
     ? JSON.parse(localStorage.getItem('jwt')) 
     : null;
-    axios({
-        method: 'get',
-        url: 'http://127.0.0.1:5000/api/v1/users/businesses',
-        headers: {
-            'Content-Type': 'application/json',
-            'x-access-token':token
+    axios.get(baseUrl + 'users/businesses'+searchStr, 
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token':token
+            }
         }
-    })
-    .then(response=> 
+    ).then(response =>{
         dispatcher.dispatch({
             type:"LOAD_BUSINESSES",
             data:response.data
-        })
-    )
-    .catch(function (error) {
-        dispatcher.dispatch({
-            type:"LOAD_BUSINESSES",
-            data: error.response.data
         });
+    }
+    ).catch( error => {
+        if(error.response){
+            dispatcher.dispatch({
+                type:"LOAD_BUSINESSES",
+                data: error.response.data
+            });
+        }
     });
 }
 
@@ -54,29 +57,106 @@ export const registerBusiness = (data) =>{
     const token = localStorage.getItem('jwt') 
     ? JSON.parse(localStorage.getItem('jwt')) 
     : null;
-    axios({
-        method: 'post',
-        url: 'http://127.0.0.1:5000/api/v1/businesses',
-        data: data,
-        headers: {
-            'Content-Type': 'application/json',
-            'x-access-token':token
+    axios.post(baseUrl +'businesses',
+        data,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token':token
+            }
         }
-    })
-    .then(response=>
+    )
+    .then(response =>{
         dispatcher.dispatch({
             type:"REGISTER_BUSINESSES",
             data:response.data
         })
+    }
+        
     )
+    .catch( error => {
+        if(error.response){
+            dispatcher.dispatch({
+                type:"REGISTER_BUSINESSES",
+                data:error.response.data
+            })
+        }
+    })
+}
+
+export const updateBusiness = (data, id) => {
+    const token = localStorage.getItem('jwt') 
+    ? JSON.parse(localStorage.getItem('jwt')) 
+    : null;
+    axios.put(baseUrl +'businesses/'+id,
+        data,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token':token
+            }
+        }
+    )
+    .then(response =>{
+        dispatcher.dispatch({
+            type:"UPDATE_BUSINESSES",
+            data:{
+                id:id,
+                res:response.data
+            }
+        })
+    })
+    .catch(error => {
+        if(error.response){
+            dispatcher.dispatch({
+                type:"UPDATE_BUSINESSES",
+                data: {
+                    id:id,
+                    res:error.response.data
+                }
+            });
+        }
+    })
+}
+export const deleteBusiness = (id) => {
+    const token = localStorage.getItem('jwt') 
+    ? JSON.parse(localStorage.getItem('jwt')) 
+    : null;
+    axios.delete(baseUrl +'businesses/'+id,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token':token
+            }
+        }
+    )
+    .then(response =>{
+        dispatcher.dispatch({
+            type:"DELETE_BUSINESSES",
+            data:{
+                id:id,
+                res:response.data
+            }
+        })
+    })
+    .catch(error => {
+        if(error.response){
+            dispatcher.dispatch({
+                type:"DELETE_BUSINESSES",
+                data: {
+                    id:id,
+                    res:error.response.data
+                }
+            });
+        }
+    });
 }
 
 export const getReviews = (id) =>{
-    axios({
-        method: 'get',
-        url: 'http://127.0.0.1:5000/api/v1/businesses/'+id+'/reviews',
+    axios.get(baseUrl +'businesses/'+id+'/reviews',
+    {
         headers: {
-            'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
         }
     })
     .then(response=>
@@ -89,26 +169,26 @@ export const getReviews = (id) =>{
         })
     )
     .catch(function (error) {
-        // console.log(error);
-        // dispatcher.dispatch({
-        //     type:"LOAD_BUSINESSES",
-        //     data: error.response.data
-        // });
+        if(error.response){
+            dispatcher.dispatch({
+                type:"LOAD_BUSINESSES",
+                data: error.response.data
+            });
+        }
     });
 }
 export const postReview = (id, data) =>{
-    console.log(id);
     const token = localStorage.getItem('jwt') 
     ? JSON.parse(localStorage.getItem('jwt')) 
     : null;
-    axios({
-        method: 'post',
-        data:data,
-        url: 'http://127.0.0.1:5000/api/v1/businesses/'+id+'/reviews',
-        headers: {
+    axios.post(
+        baseUrl+'businesses/'+id+'/reviews',
+        data,
+        {
+            headers: {
             'Content-Type': 'application/json',
             'x-access-token':token
-        }
+            }
     })
     .then(response=>
         dispatcher.dispatch({
@@ -120,12 +200,14 @@ export const postReview = (id, data) =>{
         })
     )
     .catch(function (error) {
-        dispatcher.dispatch({
-            type:"ADD_REVIEW",
-            data: {
-                id:id,
-                res:error.response.data
-            }
-        });
+        if(error.response){
+            dispatcher.dispatch({
+                type:"ADD_REVIEW",
+                data: {
+                    id:id,
+                    res:error.response.data
+                }
+            });
+        }
     });
 }

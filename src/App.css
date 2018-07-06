@@ -138,3 +138,77 @@ ul.reviews li span.mini-border-bottom{
   background-color: #007bff!important;
   color: #fff!important;
 }
+#img-loader{
+  display: block;
+  margin: auto;
+}
+.off{
+  color: #e1d7cb!important;
+}
+.owner-btn{
+  display: inline;
+}
+.sweet-alert button{
+  font-size: 11px!important;
+  text-transform: UPPERCASE!important;
+}
+.no-margin-bottom{
+  margin-bottom: 0px !important;
+}
+.mr1{
+  margin-right: 0.5rem;
+}
+.u-b .dropdown-item{
+  color: #292b2c!important;
+}
+.review-wrapper{
+  margin-top:1rem;
+}
+ul.reviews{
+  background: rgb(248, 248, 248);
+}
+p.badge{
+  margin-bottom: 0!important;
+}
+.business-name{
+  color: #337ab7;
+}
+.carousel img{
+  width: 100%;
+}
+.carousel .jumbotron{
+  background: #31303024;
+}
+.carousel p.description{
+  font-size: 16px;
+}
+/* parallas */
+.parallax{
+  height: 700px;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  
+}
+
+.parallax-inner{
+  background: #0000007a;
+  height: 100%;
+  color: white;
+}
+.parallax-inner .jumbotron{
+  background: transparent;
+}
+.parallax-inner h1{
+ font-size: 4.1875rem;
+ text-transform: uppercase;
+}
+.parallax-inner .intro-body{
+  font-size: 16px;
+  margin-top:50px;
+}
+.clear{
+  background: transparent !important;
+}

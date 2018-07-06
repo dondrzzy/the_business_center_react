@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import "./App.css";
 import Navbar from "./components/layout//Navbar";
-import Routes from "./routes";
+import Routes from "./routes/Index";
 import Footer from "./components/layout/Footer";
 import createBrowserHistory from 'history/createBrowserHistory';
 
@@ -12,10 +12,9 @@ export default class App extends Component{
     this.state = {
       isLoggedIn : false
     }
-    let history;
   }
 
-  componentWillMount(){
+  componentWillMount = () => {
     this.history = createBrowserHistory();
   }
 
@@ -24,7 +23,7 @@ export default class App extends Component{
     else  this.setState({ isLoggedIn : false });
   }
 
-  render(){
+  render = ()=> {
     return (
       <Router>
         <div>

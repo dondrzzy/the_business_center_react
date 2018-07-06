@@ -5,12 +5,12 @@ import UserStore from '../../stores/UserStore';
 import * as UserActions from '../../actions/UserActions';
 import { ToastContainer, toast } from 'react-toastify';
 import { css } from 'glamor';
+import Gifs from '../../utils/gitImage';
 
 export default class Register extends Component{
 
-    constructor(){
-        super();
-        //set defualt state prpoperties
+    constructor(props){
+        super(props);
         this.state = {
             isRegistered:false,
             formValidated : "",
@@ -29,25 +29,23 @@ export default class Register extends Component{
             validConfirmPassword : false,
             confirmPasswordMessage : "This field is required"
         }
-        this.showFormErrors = this.showFormErrors.bind(this);
-        this.confirmRegistration = this.confirmRegistration.bind(this);   
     }
 
-    componentWillMount(){//eventemitters to look out for when component mounts
+    componentWillMount = () => {//eventemitters to look out for when component mounts
         UserStore.on('error', this.showFormErrors);
         UserStore.on('success', this.confirmRegistration);
     }
-    componentWillUnmount(){
+    componentWillUnmount = () => {
         UserStore.removeListener('error', this.showFormErrors);
         UserStore.removeListener('success', this.confirmRegistration);
     }
 
     // method called after user has successfully registered
-    confirmRegistration(){
+    confirmRegistration = () => {
         this.setState({
             loaderStyle:{display:"none"}
         });
-        toast.success(UserStore.get_response(), {
+        toast.success(UserStore.getResponse(), {
             position: toast.POSITION.TOP_RIGHT,
             onClose: () => (
                 this.setState({isRegistered:true})
@@ -56,8 +54,8 @@ export default class Register extends Component{
     }
 
     // method triggers the error mesage to be displayed to the user
-    showFormErrors(){
-        toast.error(UserStore.get_response(), {
+    showFormErrors = () => {
+        toast.error(UserStore.getResponse(), {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: false,
         });
@@ -68,7 +66,7 @@ export default class Register extends Component{
     }
 
     // method validates the password
-    validatePassword(password){
+    validatePassword = password => {
         // eslint-disable-next-line to the line before.
         const regExp = new RegExp(/^(?=.*?[a-z])(?=.*?[\d])(?=.*?[\W]).{6,35}$/);
         if(regExp.test(password)){
@@ -79,7 +77,7 @@ export default class Register extends Component{
     }
 
     // method handles the validation of password
-    handlePasswordValidation(password, confirmPassword){
+    handlePasswordValidation = (password, confirmPassword) => {
         let passwordMatch = false;
         if(!confirmPassword.trim()){
             this.setState({
@@ -100,7 +98,6 @@ export default class Register extends Component{
             });
             passwordMatch = true;
         }
-        console.log(password.trim());
         if(!password.trim()){
             this.setState({
                 passwordClassName:"form-control is-invalid",
@@ -120,13 +117,12 @@ export default class Register extends Component{
             if(passwordMatch){
                 return true;
             }
-            
         }
         return false;
     }
 
     // method validates the email
-    validateEmail(email){
+    validateEmail = email => {
         // eslint-disable-next-line to the line before.
         const regExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
         if(regExp.test(email)){
@@ -136,8 +132,8 @@ export default class Register extends Component{
         }
     }
 
-    // methods handles email validation
-    handleEmailValidation(email){
+    // method handles email validation
+    handleEmailValidation = email => {
         if(!email.trim()){
             this.setState({
                 emailClassName:"form-control is-invalid",
@@ -159,7 +155,7 @@ export default class Register extends Component{
         }
         return false;
     }
-    validateName(name){
+    validateName = name => {
         // eslint-disable-next-line to the line before.
         const regex = new RegExp(/^[a-zA-Z ]{2,30}$/);
         if (regex.test(name)) {
@@ -168,8 +164,7 @@ export default class Register extends Component{
             return false;
         }
     }
-    handleNameValidation(name){
-        console.log(name.trim());
+    handleNameValidation = name => {
         if(!name.trim()){
             this.setState({
                 nameClassName:"form-control is-invalid",
@@ -179,7 +174,7 @@ export default class Register extends Component{
             this.setState({
                 nameClassName:"form-control is-invalid",
                 validName : false,
-                nameMessage: "Please enter a valid email"
+                nameMessage: "Please enter a valid name"
             });
         }else{
             this.setState({
@@ -191,8 +186,8 @@ export default class Register extends Component{
         return false;
     }
     // validate email and submit form data
-    handleSubmit(e){
-        e.preventDefault();
+    handleSubmit = event => {
+        event.preventDefault();
         let password =  this.refs.password.value;
         let confirmPassword =  this.refs.confirmPassword.value;
         let nameRes = this.handleNameValidation(this.refs.name.value);
@@ -228,13 +223,14 @@ export default class Register extends Component{
         let invalidConfirmPassword = <div className="feedback invalid-feedback">{this.state.confirmPasswordMessage}</div>
         let confirmPasswordFeedback = this.state.validConfirmPassword ? validConfirmPassword : invalidConfirmPassword;
 
-        if(this.state.isRegistered){
+        if(this.state.isRegistered || UserStore.isLoggedIn() === true){
             return(
                 <Redirect to='/login' />
             )
         }
 
         return(
+            <div className="container" id="main">
             <div className="row justify-content-center">
                 <div className="col-md-6 SignUp">
                     <ToastContainer />
@@ -262,12 +258,14 @@ export default class Register extends Component{
                         </div>
                         <div className="form-group">
                             <label className="col-form-label" htmlFor="">Password:</label>
-                            <input disabled={disabled} type="password" ref="password" className={this.state.passwordClassName} placeholder="Password" />
+                            <input disabled={disabled} type="password" ref="password" 
+                            className={this.state.passwordClassName} name="password" placeholder="Password" />
                             {passwordFeedback}
                         </div>
                         <div className="form-group">
                             <label className="col-form-label" htmlFor="confirmPassword">Confirm Password:</label>
-                            <input disabled={disabled} type="password" ref="confirmPassword" className={this.state.confirmPasswordClassName} placeholder="Confirm Password" />
+                            <input disabled={disabled} type="password" ref="confirmPassword" 
+                            className={this.state.confirmPasswordClassName} name="confirmPassword" placeholder="Confirm Password" />
                             {confirmPasswordFeedback}
                         </div>
                         <div className="form-group">
@@ -275,19 +273,13 @@ export default class Register extends Component{
                                 <img
                                     style={this.state.loaderStyle}
                                     // eslint-disable-next-line to the line before.
-                                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWph
-                                    eGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAA
-                                    AEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBo
-                                    VjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DY
-                                    lJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAA
-                                    ACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFV
-                                    dmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYR
-                                    gHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                    src={Gifs.getImageLoader()} />
                             </div>
                             <input type="submit" value="Submit" disabled={disabled} className="btn btn-block btn-primary" />
                         </div>                     
                     </form>
                 </div>
+            </div>
             </div>
         );
     }
