@@ -1,16 +1,52 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom'
 import { shallow, mount } from 'enzyme';
 import Login from '../../components/auth/Login';
 import { MemoryRouter } from 'react-router-dom';
 import * as UserActions from '../../actions/UserActions';
 import axios from 'axios';
-import sinon from 'sinon';
+import { copyFile } from 'fs';
+import { UserStore } from '../../stores/UserStore';
 
+let location = {'state':{'from':'/businesses'}};
+let wrapper, component;
 
+describe('Login component', () => {
+	beforeEach(() => {
+		axios.post.mockImplementationOnce(
+			jest.fn(()=> Promise.reject({
+			response: {
+				data:{
+				success: false,
+				message: "User not found"
+				}
+			}
+			}))
+		);
+		wrapper =  shallow(
+			<MemoryRouter>
+				<Login location={location}/>
+			</MemoryRouter>
+		);
+		component = wrapper.find(Login).dive()
+	});
+	afterEach( () => {
+		wrapper.unmount();
+	});
+	it('should set state message on invalid login', () => {
+		component.find("input[name='email']")
+			.simulate('change', {target: {value: 'johndoe@gmail.com'}});
+		component.find("input[name='password']")
+			.simulate('change', {target: {value: '#xxx@2017'}})
+		component.find('form').simulate('submit', {preventDefault: () => {}});
+		setImmediate(() => {
+			expect(component.state().message).toBe('User not found');
+		});
+	});
+});
 
 describe('<Login />', () => {
-  let location = {'state':{'from':'/businesses'}};
-  let wrapper;
+
   beforeEach(() =>{
     wrapper = mount(
       <MemoryRouter>

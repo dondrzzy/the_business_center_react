@@ -105,12 +105,10 @@ export class UserStore extends EventEmitter{
 
     // emit show event if user reset token was successfully decoded else emit error or redirect
     showResetPassword = res => {
-        console.log(res)
         if(res.success){
             this.resetEmail = res.user;
             this.emit('show');
         }else{
-            console.log('******')
             this.message = res.message;
             this.pendingMessage = true;
             this.pendingStatus = 'error';

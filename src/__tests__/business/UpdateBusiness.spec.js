@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import UpdateBusiness from '../../components/businesses/UpdateBusiness';
+import Businesses from '../../components/businesses/Businesses';
 import * as BusinessActions from '../../actions/BusinessActions';
-import { MemoryRouter } from 'react-router-dom';
 import axios from 'axios';
 
 describe(<UpdateBusiness />, () => {
@@ -87,3 +87,27 @@ describe(<UpdateBusiness />, () => {
         expect(spy).toHaveBeenCalled();
     });
 })
+
+describe('Businesses component with update business actions', () => {
+    beforeEach(() => {
+        axios.put.mockImplementationOnce(
+        jest.fn(()=> Promise.reject({
+            response:{
+            data:{
+                success: false,
+                message: 'Invalid business name'
+            }
+            }
+        }))
+        );
+    })
+
+    it('should set state message when a business update action fails', () => {
+        let wrapper = shallow(<Businesses />);
+        BusinessActions.updateBusiness({});
+        setImmediate(() => {
+        expect(wrapper.state().message).toBe('Invalid business name');
+        wrapper.unmount();
+        });
+    })
+});

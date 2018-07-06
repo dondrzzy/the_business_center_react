@@ -15,7 +15,11 @@ describe(<DeleteBusiness />, () => {
             status: 'Approved',
             category: 'IT'
         },
-        id:1
+        id:1,
+        user:{ 
+            name: 'John Doe',
+            id: 1
+        }
     }
     let categoryOptions = []
     beforeEach(() => {
@@ -43,4 +47,4 @@ describe(<DeleteBusiness />, () => {
         await wrapper.find("button[type='button']").simulate('click');
         expect(spy).toHaveBeenCalled();
     });
-})
+});

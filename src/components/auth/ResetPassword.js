@@ -13,7 +13,7 @@ export default class ResetPassword extends Component{
         super(props);
         this.state = {
             verified: false,
-            rediectToForgot: false,
+            redirectToForgot: false,
             resetUserEmail: "",
             isReset:false,
             formValidated : "",
@@ -65,9 +65,8 @@ export default class ResetPassword extends Component{
     // redirect the user to login incase the reset token is invalid
     redirectUser = () => {
         this.setState({
-            rediectToForgot:true
+            redirectToForgot:true
         });
-        console.log('chsnged state')
     }
 
     // show success message on successfully reseting the password
@@ -175,8 +174,7 @@ export default class ResetPassword extends Component{
     }
     
     render(){
-        console.log('--', this.state.rediectToForgot)
-        if(this.state.rediectToForgot){
+        if(this.state.redirectToForgot){
             return(
                 <Redirect to='/forgot_password' />
             )

@@ -26,7 +26,8 @@ class Login extends Component{
             emailMessage:"This field is required",
             passwordClassName: "form-control",
             validPassword : false,
-            passwordMessage : "This field is required"
+            passwordMessage : "This field is required",
+            message: ""
         }
     }
 
@@ -73,7 +74,10 @@ class Login extends Component{
             processing:false,
             formValidated:"",
             emailMessage: "This field is required",
-            passwordMessage: "This field is required"
+            passwordMessage: "This field is required",
+            emailClassName: 'form-control',
+            passwordClassName: 'form-control',
+            message: UserStore.getResponse()
         });
     }
     
@@ -155,7 +159,7 @@ class Login extends Component{
         })
     }
 
-    render = () => {
+    render(){
         const { redirectToReferrer } = this.state;
         const { from } = this.props.location.state ? this.props.location.state : { from : {pathname : '/dashboard'}}
         if(redirectToReferrer === true || UserStore.isLoggedIn() === true){

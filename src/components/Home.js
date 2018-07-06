@@ -28,7 +28,6 @@ export default class Home extends Component{
         
     }
     render = () => {
-        console.log(BusinessCenterImage)
         let unAuthBtns = this.state.isAuthenticated
         ? ""
         :<div className="text-center">

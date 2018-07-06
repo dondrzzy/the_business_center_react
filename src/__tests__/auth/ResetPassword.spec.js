@@ -2,16 +2,13 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import ResetPassword from '../../components/auth/ResetPassword';
 import { MemoryRouter } from 'react-router-dom';
-import * as UserActions from '../../actions/UserActions';
-import UserStore from '../../stores/UserStore';
 import axios from 'axios';
-import { wrap } from 'module';
 
-describe('<ResetPassword />', () => {
-  let wrapper,
+let wrapper,
       component;
-  let location = {'state':{'from':'/login'}};
-  let match = {params:{token:"hsdhjgvdgvhsd"}}
+let location = {'state':{'from':'/login'}};
+let match = {params:{token:"hsdhjgvdgvhsd"}}
+describe('<ResetPassword />', () => {
   beforeEach(() => {
     axios.post.mockImplementation(
       jest.fn(()=> Promise.resolve({ 
@@ -55,7 +52,7 @@ describe('<ResetPassword />', () => {
         <ResetPassword location={location} match={match} />
       </MemoryRouter>
     );
-    expect(wrapper.find(ResetPassword).instance().state.rediectToForgot).toBeTruthy();
+    expect(wrapper.find(ResetPassword).instance().state.redirectToForgot).toBeTruthy();
   });
 
   it('should validate empty form inputs', ()=>{
@@ -104,18 +101,73 @@ describe('<ResetPassword />', () => {
     await form.simulate('submit', {preventDefault: () => {}});
     expect(component.state().isReset).toBeTruthy();
   });
+});
 
-  it('should redirect user on passing invalid token', async () => {
-    axios.post.mockImplementationOnce(
-      jest.fn(()=> Promise.resolve({
-        data:{
-          success:false,
-          message:'Invalid token'
+describe('Reset password with invalid toek server error', () => {
+
+  beforeEach(() => {
+    axios.post.mockImplementation(
+      jest.fn(()=> Promise.reject({
+        response: {
+          data:{
+            success:false,
+            message:'Invalid reset token' 
           }
+        }
       }))
-    )
-    let wrappedComponent = await shallow(<ResetPassword location={location} match={match}/>);
-    let spy = jest.spyOn(wrappedComponent.instance(), 'redirectUser');
-    expect(wrappedComponent.state().rediectToForgot).toBeTruthy();
-  })
+    );
+     wrapper = shallow(
+      <MemoryRouter>
+        <ResetPassword location={location} match={match} />
+      </MemoryRouter>
+    );
+   component = wrapper.find(ResetPassword).dive()
+  });
+  afterEach(() => {
+    wrapper.unmount()
+  });
+
+  it('should redirect user on passing invalid token', () => {
+    expect(component.state().redirectToForgot).toBeTruthy();
+  });
+})
+
+describe('Reset password with invalid form', () => {
+
+  beforeEach(() => {
+    axios.post.mockImplementation(
+      jest.fn(()=> Promise.reject({
+        response: {
+          data:{
+            success:false,
+            message:'Invalid reset token' 
+          }
+        }
+      }))
+    );
+     wrapper = shallow(
+      <MemoryRouter>
+        <ResetPassword location={location} match={match} />
+      </MemoryRouter>
+    );
+   component = wrapper.find(ResetPassword).dive()
+  });
+  afterEach(() => {
+    wrapper.unmount()
+  });
+
+  it('should set state with error message from server', () => {
+    component.setState({
+      redirectToForgot:false,
+      isReset: false,
+      verified: true,
+    });
+    let form = component.find('form');
+    form.find("input[name='password']").simulate('change', {target: {value: "#x@12345"}});
+    form.find("input[name='confirmPassword']").simulate('change', {target: {value: "#x@12345"}});
+    form.simulate('submit', {preventDefault: () => {}});
+    setImmediate(() => {
+      expect(component.state().alertMessage).toBe('Invalid reset token')
+    });
+  });
 });

@@ -30,6 +30,7 @@ export class BusinessStore extends EventEmitter{
             this.emit('change');
         }else{
             if(res.token === false){
+                this.message = 'res.message';
                 this.emit('redirect');
             }else{
                 this.emit('failure');
@@ -44,7 +45,7 @@ export class BusinessStore extends EventEmitter{
             this.emit('success');
         }else{
             if(res.token === false){
-                this.message = "You must be logged in to perform that action."
+                this.message = "You must be logged in to perform that action"
                 this.emit('redirect');
             }else{
                 this.message = res.message;
@@ -61,7 +62,7 @@ export class BusinessStore extends EventEmitter{
             this.emit('update');
         }else{
             if(data.res.token === false){
-                this.message = "You must be logged in to perform that action."
+                this.message = "You must be logged in to perform that action"
                 this.emit('redirect');
             }else{
                 this.message = data.res.message;
@@ -71,14 +72,14 @@ export class BusinessStore extends EventEmitter{
     }
 
     // handle delete business response from the server
-    deleteBusinesses = data => {
+    deleteBusiness = data => {
         if(data.res.success){
             this.message = data.res.message;
             this.deletedBusinessId = data.id;
             this.emit('delete');
         }else{
             if(data.res.token === false){
-                this.message = "You must be logged in to perform that action."
+                this.message = "You must be logged in to perform that action"
                 this.emit('redirect');
             }else{
                 this.message = data.res.message;
@@ -103,12 +104,12 @@ export class BusinessStore extends EventEmitter{
             this.message = data.res.message;
             this.emit('review_posted');
         }else{
-            if(!data.res.token){
-                this.message = "You must be logged in to perform that action."
+            if(data.res.token === false){
+                this.message = "You must be logged in to perform that action";
                 this.emit('redirect');
             }
             else{
-                this.message = data.res.success
+                this.message = data.res.message;
                 this.emit('failure');
             }
         }
@@ -131,7 +132,7 @@ export class BusinessStore extends EventEmitter{
     // add response reviews to the store reviews object
     loadReviews = data => {
         if(data.res.success){
-            this.reviews[data.id] = data.res.reviews;
+            this.reviews[data.id] = data.res.reviews ? data.res.reviews : [];
             this.currentBusinessId = data.id;
             this.emit('reviews_change')
         }
@@ -158,7 +159,7 @@ export class BusinessStore extends EventEmitter{
                 this.updateBusinesses(action.data);
                 break;
             case "DELETE_BUSINESSES":
-                this.deleteBusinesses(action.data);
+                this.deleteBusiness(action.data);
                 break;
             case "GET_REVIEWS":
                 this.loadReviews(action.data);

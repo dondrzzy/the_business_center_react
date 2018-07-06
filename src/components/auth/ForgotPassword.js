@@ -20,7 +20,8 @@ export default class ForgotPassword extends Component{
             validEmail : false,
             emailMessage:"This field is required",
             alertClass: "",
-            message: ""
+            message: "",
+            report: UserStore.getPendingReport()
         }
     }
 
@@ -34,8 +35,8 @@ export default class ForgotPassword extends Component{
     }
     
     componentDidMount = () => {
-        let report = UserStore.getPendingReport();
-        if(report && report.status === "error") {
+        let report = this.state.report;
+        if(report && report.status === "error"){
             toast.error(report.message, {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: false,

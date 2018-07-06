@@ -12,13 +12,13 @@ export const authenticateUser = data =>{
             'Content-Type': 'application/json'
             }
         })
-    .then(response=>{
+    .then(response => {
         dispatcher.dispatch({
             type:"LOGIN_USER",
             data:response.data
         })
     })
-    .catch(function (error) {
+    .catch( error => {
         if(error.response){
             dispatcher.dispatch({
                 type:"LOGIN_USER",
@@ -142,7 +142,6 @@ export const verifyToken = token =>{
             }
         })
     .then(function (response) {
-        console.log('rejecting')
         dispatcher.dispatch({
             type:"SHOW_RESET_PASSWORD",
             data:response.data
