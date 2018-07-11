@@ -14,7 +14,8 @@ export default class Businesses extends Component{
                 businesses:[],
                 next_page:'',
                 prev_page:'',
-                categories: []
+                categories: [],
+                total: 0
             },
             params : {
                 page:1,
@@ -25,24 +26,30 @@ export default class Businesses extends Component{
             },
             formValidated: 'form',
             invalidForm: false,
-            formFeedback: ""
+            formFeedback: "",
+            message: ""
         }
     }
     componentWillMount = () => {
         this.setState({
             decodedId: UserStore.getDecodedId()
-        })
+        });
         BusinessStore.on('change', this.getBusinesses);
         BusinessStore.on('review_posted', this.toastSuccess);
+        BusinessStore.on('failure', this.toastErrors);
     }
     componentWillUnmount = () => {
         BusinessStore.removeListener('change', this.getBusinesses);
         BusinessStore.removeListener('review_posted', this.toastSuccess);
+        BusinessStore.removeListener('failure', this.toastErrors);
     }
     componentDidMount = () => {
         BusinessActions.getBusinesses('');
     }
     toastErrors = () => {
+        this.setState({
+            message: BusinessStore.getResponse()
+        })
         toast.error(BusinessStore.getResponse(), {
             position: toast.POSITION.TOP_RIGHT,
             autoClose: false,

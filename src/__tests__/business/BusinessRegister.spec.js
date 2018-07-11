@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import BusinessRegister from '../../components/businesses/BusinessRegister';
+import Businesses from '../../components/businesses/Businesses';
 import * as BusinessActions from '../../actions/BusinessActions';
 import axios from 'axios';
 
@@ -50,8 +51,9 @@ describe(<BusinessRegister />, () => {
         expect(wrapper.state().categoryClass).toContain('is-invalid');
     });
 
-    it("should submit valid business register form", () => {
-        let spy = jest.spyOn(BusinessActions, 'registerBusiness');
+    it("should call handleBusinessRegister on form submit", () => {
+        let spy = jest.spyOn(wrapper.instance(), 'handleBusinessRegister');
+        wrapper.instance().forceUpdate()
         wrapper.find("input[name='name']")
           .simulate('change', {target: {value: 'andela'}});
         wrapper.find("input[name='location']")
@@ -61,5 +63,32 @@ describe(<BusinessRegister />, () => {
         wrapper.find('#submitBtn').simulate('click', {preventDefault: () => {}})
         expect(spy).toHaveBeenCalled();
     });
+});
 
-})
+describe('Businesses component with register actions', () => {
+  let wrapper;
+  beforeEach(() => {
+      axios.post.mockImplementationOnce(
+      jest.fn(()=> Promise.reject({
+          response:{
+          data:{
+              success: false,
+              message: 'Invalid business name'
+          }
+          }
+      }))
+      );
+      wrapper = shallow(<Businesses />);
+  })
+  afterEach(() => {
+    setImmediate(()=>wrapper.unmount())
+  })
+
+  it('should set state message when a business register action fails', async () => {
+      
+      await BusinessActions.registerBusiness({});
+      setImmediate(() => {
+        expect(wrapper.state().message).toBe('Invalid business name');
+      });
+  })
+});

@@ -5,11 +5,11 @@ import Dashboard from '../components/Dashboard';
 import BusinessList from '../components/businesses/BusinessList';
 import BusinessRegister from '../components/businesses/BusinessRegister';
 import * as BusinessActions from '../actions/BusinessActions';
+import BusinessStore from '../stores/BusinessStore';
 import axios from 'axios';
-
+let wrapper,
+    component;
 describe(<Dashboard />, () => {
-    let wrapper,
-        component;
     beforeEach(() => {
       wrapper =  shallow(
         <MemoryRouter>
@@ -170,4 +170,84 @@ describe(<Dashboard />, () => {
       expect(component.find('#img-loader')).toHaveLength(1);
       component.unmount()
   });
-})
+});
+
+describe('dashboard redirect', () => {
+  beforeEach(() => {
+      axios.get.mockImplementationOnce(
+        jest.fn(()=> Promise.reject({
+          response: {
+            data:{
+              success: false,
+              token: false,
+              message: "Invalid token"
+            }
+          }
+        }))
+      );
+      wrapper =  shallow(
+        <MemoryRouter>
+            <Dashboard />
+        </MemoryRouter>
+      )
+      component = wrapper.find(Dashboard).dive();
+    })
+    afterEach( () => {
+      wrapper.unmount();
+    });
+    it('should redirect for unauthorized user', async () => {
+      await component.instance().componentDidMount();
+      expect(component.state().redirect).toBeTruthy();
+      component.update();
+      expect(component.find(Redirect)).toHaveLength(1);
+    });
+});
+
+describe('dashboard pre-loading businesses', () => {
+  beforeEach(() => {
+      axios.get.mockImplementationOnce(
+        jest.fn(()=> Promise.resolve({
+          data:{
+            success: true,
+            businesses:[
+              {
+                'id':1,
+                'name': 'name',
+                'category':{
+                  'category': 'IT',
+                  'status': 'Approved',
+                  'id': 1
+                },
+                'location': 'location',
+                'user':{ 
+                  'name': 'john doe',
+                  'id': 1
+                }
+              }
+            ],
+            next_page:'',
+            prev_page:'',
+            total: 1,
+            user: {
+              name: 'John Doe',
+              id: '1'
+            },
+            categories: [{"id": 1, "category": "category", "status":"Approved"}]
+          }
+        }))
+      );
+      wrapper =  shallow(
+        <MemoryRouter>
+            <Dashboard />
+        </MemoryRouter>
+      )
+      component = wrapper.find(Dashboard).dive();
+    })
+    afterEach( () => {
+      wrapper.unmount();
+    });
+    it('should preload state with user businesses', async () => {
+      await component.instance().componentDidMount();
+      expect(component.state().businessWrap.businesses).toHaveLength(1);
+    });
+});

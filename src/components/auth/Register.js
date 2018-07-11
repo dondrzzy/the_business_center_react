@@ -27,7 +27,8 @@ export default class Register extends Component{
             passwordMessage : "This field is required",
             confirmPasswordClassName:"form-control",
             validConfirmPassword : false,
-            confirmPasswordMessage : "This field is required"
+            confirmPasswordMessage : "This field is required",
+            message: ""
         }
     }
 
@@ -61,7 +62,8 @@ export default class Register extends Component{
         });
         this.setState({
             loaderStyle:{display:"none"},
-            processing:false
+            processing:false,
+            message: UserStore.getResponse()
         });
     }
 

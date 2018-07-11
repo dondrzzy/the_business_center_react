@@ -89,8 +89,8 @@ export default class Dashboard extends Component{
 
     loadUserBusinesses = () => {
         this.setState({
+            fetching: false,
             businessWrap:BusinessStore.getBusinesses(),
-            fetching: false
         });
     }
 
@@ -98,7 +98,7 @@ export default class Dashboard extends Component{
         this.toastSuccess();
         $('#bregisterModal').hide();
         $('.modal-backdrop').remove();
-        $('body').removeClass('modal-open')
+        $('body').removeClass('modal-open');
         $('button[data-target="#bregisterModal"]').click();
         this.encodeQueryData();
     }
@@ -137,7 +137,7 @@ export default class Dashboard extends Component{
     }
 
     setParams = params => {
-        if(this.refs.dashboard) this.setState({ params });
+        this.setState({ params });
     }
 
     encodeQueryData = () => {
@@ -149,9 +149,7 @@ export default class Dashboard extends Component{
             else if(i === 'limit' && params[i] !== 5)
                 urlParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(params[i]));
         }
-        if(this.refs.dashboard){
-            BusinessActions.getUserBusinesses("?" + urlParams.join('&'));
-        }
+        BusinessActions.getUserBusinesses("?" + urlParams.join('&'));
     }
 
     handleLimitChange = event => {

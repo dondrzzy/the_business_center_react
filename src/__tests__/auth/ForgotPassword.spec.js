@@ -24,6 +24,7 @@ describe('<ForgotPassword />', () => {
     component = wrapper.find(ForgotPassword).dive()
   });
   afterEach(() => {
+    component.unmount();
     wrapper.unmount()
   });
 
@@ -52,19 +53,34 @@ describe('<ForgotPassword />', () => {
     expect(component.state().message).toEqual('A link has been sent to: abc@gmail.com');
   });
 
-  it('should load server error', async () => {
-    axios.post.mockImplementation(
-        jest.fn(()=> Promise.resolve({ 
+  it('should load server error', () => {
+    axios.post.mockImplementationOnce(
+			jest.fn(()=> Promise.reject({
+        response: {
           data:{
-            success:false,
-            message:'User not found'
-            }
-        }))
-      )
+            success: false,
+            message: "User not found"
+          }
+        }
+			}))
+		);
+    let wrapper = shallow(
+      <MemoryRouter>
+        <ForgotPassword />
+      </MemoryRouter>
+    );
+    let component = wrapper.find(ForgotPassword).dive()
+    component.setState({
+      report: {
+        'status':'error',
+        'message':'Token is expired'
+      }
+    })
     let form = component.find('form');
     form.find("input[name='email']").simulate('change', {target: {value: "abc@gmail.com"}});
-    await form.simulate('submit', {preventDefault: () => {}});
-    expect(component.state().message).toEqual('User not found');
+    form.simulate('submit', {preventDefault: () => {}});
+    setImmediate(() => {
+      expect(component.state().message).toBe('User not found');
+    });
   });
-
 });

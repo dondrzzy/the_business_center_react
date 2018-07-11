@@ -15,14 +15,6 @@ export const getBusinesses = (searchStr) =>{
             type:"LOAD_BUSINESSES",
             data:response.data
         })
-    })
-    .catch( error => {
-        if(error.response){
-            dispatcher.dispatch({
-                type:"LOAD_BUSINESSES",
-                data: error.response.data
-            });
-        }
     });
 }
 
@@ -168,14 +160,6 @@ export const getReviews = (id) =>{
             }
         })
     )
-    .catch(function (error) {
-        if(error.response){
-            dispatcher.dispatch({
-                type:"LOAD_BUSINESSES",
-                data: error.response.data
-            });
-        }
-    });
 }
 export const postReview = (id, data) =>{
     const token = localStorage.getItem('jwt') 
@@ -190,7 +174,7 @@ export const postReview = (id, data) =>{
             'x-access-token':token
             }
     })
-    .then(response=>
+    .then(response =>
         dispatcher.dispatch({
             type:"ADD_REVIEW",
             data:{
@@ -199,7 +183,7 @@ export const postReview = (id, data) =>{
             }
         })
     )
-    .catch(function (error) {
+    .catch( error => {
         if(error.response){
             dispatcher.dispatch({
                 type:"ADD_REVIEW",

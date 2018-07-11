@@ -1,17 +1,25 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import { Redirect } from 'react-router-dom';
 import Register from '../../components/auth/Register';
 import { MemoryRouter } from 'react-router-dom';
 import * as UserActions from '../../actions/UserActions';
-import UserStore from '../../stores/UserStore';
 import axios from 'axios';
-import { after } from 'glamor';
 
+let wrapper,
+    component;
 describe('<Register />', () => {
-	let wrapper,
-			component;
+
 	let location = {'state':{'from':'/login'}};
   beforeEach(() => {
+    axios.post.mockImplementation(
+      jest.fn(()=> Promise.resolve({
+        data:{
+          success: true,
+          message: "User registered successfully"
+        }
+      }))
+    );
 		wrapper = mount(
       <MemoryRouter>
         <Register location={location} />
@@ -75,3 +83,53 @@ describe('<Register />', () => {
     });
   });
 });
+
+describe('register user on server error response', () => {
+	beforeEach(() => {
+		axios.post.mockImplementationOnce(
+			jest.fn(()=> Promise.reject({
+			response: {
+				data:{
+				success: false,
+				message: "Invalid name"
+				}
+			}
+			}))
+		);
+		wrapper =  mount(
+			<MemoryRouter>
+				<Register location={location}/>
+			</MemoryRouter>
+		);
+		component = wrapper.find(Register);
+	});
+	afterEach( () => {
+		wrapper.unmount();
+	});
+	it('user', async () => {
+		const form = component.find('form');
+    form.find("input[type='text']").instance().value = 'donald sibo';
+    form.find("input[name='email']").instance().value = 'a@gmail.com';
+    form.find("input[name='password']").instance().value = "#x@123456";
+    form.find("input[name='confirmPassword']").instance().value = "#x@123456";
+    wrapper.find('form').simulate('submit');
+		setImmediate(() => {
+			expect(component.instance().state.message).toBe("Invalid name");
+		});
+	});
+});
+
+describe('Register component redirect', () => {
+  let wrapper = shallow(
+    <MemoryRouter>
+      <Register location={location} />
+    </MemoryRouter>
+  );
+  let component = wrapper.find(Register).dive();
+  it('should redirect logged in user', () => {
+    component.setState({
+      isRegistered:true
+    });
+    expect(component.find(Redirect)).toHaveLength(1);
+  });
+})
