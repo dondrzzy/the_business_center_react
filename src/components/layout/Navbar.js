@@ -21,23 +21,23 @@ export default class Navbar extends Component{
         this.setState({isAuthenticated:UserStore.isLoggedIn()});
     }
     render = () => {
-        let defaultNav = <ul className="nav navbar-nav ml-auto">
-                            <li className="nav-item">
-                                <NavLink className="nav-link" activeClassName="active" to="/login">Login</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link" activeClassName="active" to="/register">Register</NavLink>
-                            </li>
-                        </ul>
-        let loggedInNav = <ul className="nav navbar-nav ml-auto">
-                            <li className="nav-item">
-                                <NavLink className="nav-link" activeClassName="active" to="/dashboard">Dashboard</NavLink>
-                            </li>
-                            <li className="nav-item">
-                                <NavLink className="nav-link" to="/logout">Logout</NavLink>
-                            </li>
-                        </ul>
-        const navbarRight = this.state.isAuthenticated ? loggedInNav : defaultNav;
+        const navbarRight = this.state.isAuthenticated 
+        ?<ul className="nav navbar-nav ml-auto">
+            <li className="nav-item">
+                <NavLink className="nav-link" activeClassName="active" to="/dashboard">Dashboard</NavLink>
+            </li>
+            <li className="nav-item">
+                <NavLink className="nav-link" to="/logout">Logout</NavLink>
+            </li>
+        </ul>
+        :<ul className="nav navbar-nav ml-auto">
+            <li className="nav-item">
+                <NavLink className="nav-link" activeClassName="active" to="/login">Login</NavLink>
+            </li>
+            <li className="nav-item">
+                <NavLink className="nav-link" activeClassName="active" to="/register">Register</NavLink>
+            </li>
+        </ul>
         return (
             <div className="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
                 <div className="container">

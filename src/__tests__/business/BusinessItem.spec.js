@@ -110,7 +110,8 @@ describe(<BusinessItem />, () => {
 
 describe('Businesses component on post review reject', () => {
     beforeEach(() => {
-      axios.post.mockImplementationOnce(
+        window.localStorage.setItem('jwt', JSON.stringify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImV4cCI6MTUzMTMzMTEwN30.ONQTRwKWaMS-RD618plLzW5327VZcZ-xZ2iUzDiltqc"));
+        axios.post.mockImplementationOnce(
         jest.fn(()=> Promise.reject({
           response:{
             data:{
@@ -127,6 +128,7 @@ describe('Businesses component on post review reject', () => {
       BusinessActions.postReview({});
       setImmediate(() => {
         expect(wrapper.state().message).toBe('Please provide a valid review');
+        window.localStorage.removeItem('jwt');
         wrapper.unmount();
       });
     });

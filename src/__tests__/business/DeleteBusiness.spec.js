@@ -1,8 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import DeleteBusiness from '../../components/businesses/DeleteBusiness';
-import * as BusinessActions from '../../actions/BusinessActions';
-import { MemoryRouter } from 'react-router-dom';
+import BusinessStore from '../../stores/BusinessStore';
 import axios from 'axios';
 
 describe(<DeleteBusiness />, () => {
@@ -23,6 +22,7 @@ describe(<DeleteBusiness />, () => {
     }
     let categoryOptions = []
     beforeEach(() => {
+        window.localStorage.setItem('jwt', JSON.stringify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImV4cCI6MTUzMTMzMTEwN30.ONQTRwKWaMS-RD618plLzW5327VZcZ-xZ2iUzDiltqc"));
         wrapper = mount(
             <DeleteBusiness
                 business={business}
@@ -31,6 +31,7 @@ describe(<DeleteBusiness />, () => {
     });
 
     afterEach( () => {
+        window.localStorage.removeItem('jwt');
         wrapper.unmount()
     });
 

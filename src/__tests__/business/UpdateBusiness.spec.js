@@ -90,6 +90,7 @@ describe(<UpdateBusiness />, () => {
 
 describe('Businesses component with update business actions', () => {
     beforeEach(() => {
+        window.localStorage.setItem('jwt', JSON.stringify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImV4cCI6MTUzMTMzMTEwN30.ONQTRwKWaMS-RD618plLzW5327VZcZ-xZ2iUzDiltqc"));
         axios.put.mockImplementationOnce(
         jest.fn(()=> Promise.reject({
             response:{
@@ -108,6 +109,7 @@ describe('Businesses component with update business actions', () => {
         setImmediate(() => {
         expect(wrapper.state().message).toBe('Invalid business name');
         wrapper.unmount();
+        window.localStorage.removeItem('jwt')
         });
     })
 });

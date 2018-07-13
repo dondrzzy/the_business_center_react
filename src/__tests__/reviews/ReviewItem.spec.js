@@ -4,6 +4,7 @@ import ReviewItem from '../../components/reviews/ReviewItem';
 
 describe(<ReviewItem />, () => {
     it('should return a list', () => {
+        
         let review = {
             id: 1,
             user: 'john doe',
@@ -13,5 +14,6 @@ describe(<ReviewItem />, () => {
             <ReviewItem review={review}/>
         )
         expect(wrapper.find('li').length).toEqual(1);
+        
     });
 })

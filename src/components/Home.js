@@ -15,26 +15,7 @@ backgroundImage: `url(${Background_02})`
 };
 
 export default class Home extends Component{
-    constructor(){
-        super();
-        this.state = {
-            isAuthenticated: UserStore.isLoggedIn()
-        }
-    }
-    componentWillMount = () => {
-        this.setState({isAuthenticated:UserStore.isLoggedIn()});
-    }
-    componentWillUnmount = () => {
-        
-    }
     render = () => {
-        let unAuthBtns = this.state.isAuthenticated
-        ? ""
-        :<div className="text-center">
-            <Link id="loginBtn" to="/login" className="btn btn-primary">Login</Link>
-            <Link id="registerBtn" to="/register" className="btn btn-success">Register</Link>
-        </div>
-        
         return (
             <div className="row Home">
                 <div className="col-12">

@@ -68,6 +68,7 @@ describe(<BusinessRegister />, () => {
 describe('Businesses component with register actions', () => {
   let wrapper;
   beforeEach(() => {
+    window.localStorage.setItem('jwt', JSON.stringify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImV4cCI6MTUzMTMzMTEwN30.ONQTRwKWaMS-RD618plLzW5327VZcZ-xZ2iUzDiltqc"));
       axios.post.mockImplementationOnce(
       jest.fn(()=> Promise.reject({
           response:{
@@ -81,6 +82,7 @@ describe('Businesses component with register actions', () => {
       wrapper = shallow(<Businesses />);
   })
   afterEach(() => {
+    window.localStorage.removeItem('jwt');
     setImmediate(()=>wrapper.unmount())
   })
 

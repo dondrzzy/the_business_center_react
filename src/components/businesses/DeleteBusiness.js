@@ -14,14 +14,6 @@ export default class DeleteBusiness extends Component{
         }
     };
 
-    onOpenModal = () => {
-        this.setState({ open: true });
-    }
-
-    onCloseModal = () => {
-        this.setState({ open: false });
-    }
-
     // use swal elements to prompt the user on deleting a business
     mountAlertComponent = () => {
         const deleteComponent = () => {
